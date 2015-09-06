@@ -25,6 +25,8 @@ base-url  Base url of the examined web
 Options:
   -h "Header: value", custom HTTP header added to every fuzz request
   -m Comma-separated HTTP methods used in tests (GET, POST, PUT, DELETE, HEAD, OPTIONS)
+  -o Output text file with found urls and statuses
+  -r Target output directory of an url fuzzing HTML report
   -t Fuzzed url response timeout, in seconds
   -w Time wait period between fuzz tests per worker, in seconds
 
