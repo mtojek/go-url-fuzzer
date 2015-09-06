@@ -16,7 +16,21 @@ Discover hidden files and directories on a web server. The application tries to 
 
 ## Usage
 
-TODO
+~~~
+Usage: go-url-fuzzer [options] -f <fuzz-set-file> <base-url>
+
+fuzz-set-file  File containing fuzz entry set, one entry per line
+base-url  Base url of the examined web
+
+Options:
+  -w Time wait period between fuzz tests per worker, in seconds
+  -m Comma-separated HTTP methods used in tests (GET, POST, PUT, DELETE, HEAD, OPTIONS)
+  -h "Header: value", custom HTTP header added to every fuzz request
+  -t Fuzzed url response timeout, in seconds
+
+Example:
+
+~~~
 
 ## License
 
