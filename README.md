@@ -14,6 +14,10 @@ Discover hidden files and directories on a web server. The application tries to 
 * Different HTTP method support
 * HTML url fuzzing reports
 
+## Usage
+
+TODO
+
 ## License
 
 The MIT License (MIT)
