@@ -31,7 +31,7 @@ Options:
   -w Time wait period between fuzz tests per worker, in seconds
 
 Example:
-  go-url-fuzzer -h "User-Agent: curl -h "Cookie: token=1" -m GET,POST -r target fuzz_entries.txt http://domain.tld/base/
+  go-url-fuzzer -h "User-Agent: curl" -h "Cookie: token=1" -m GET,POST -r target fuzz_entries.txt http://domain.tld/base/
 
 ~~~
 
