@@ -7,6 +7,7 @@ before_install:
     - go get golang.org/x/tools/cmd/vet
     - go get github.com/golang/lint/golint
     - go get golang.org/x/tools/cmd/goimports
+    - go get gopkg.in/alecthomas/kingpin.v2   
 
 script:
     - go test -v ./...
