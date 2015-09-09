@@ -9,7 +9,7 @@ before_install:
 
 script:
     - go test -v ./...
-    - go lint
+    - golint
     - go vet
     - test -z "$(go fmt)"
     - test -z "$(goimports -l .)"
