@@ -1,5 +1,7 @@
 # go-url-fuzzer
 
+[![Build Status](https://travis-ci.org/mtojek/go-url-fuzzer.svg?branch=master)](https://travis-ci.org/mtojek/go-url-fuzzer)
+
 Status: **Work in progress**, not ready yet
 
 Discover hidden files and directories on a web server. The application tries to find url relative paths of the given website by comparing them with a given set. Go-url-fuzzer is inspired by [Indir Scanner](http://indir.uw-team.org/), which is written in Perl. Comparing to Indir Scanner, the application supports concurrent url fuzzing.
