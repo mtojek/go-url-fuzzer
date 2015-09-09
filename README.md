@@ -19,22 +19,26 @@ Discover hidden files and directories on a web server. The application tries to 
 ## Usage
 
 ~~~
-Usage: go-url-fuzzer [options] <fuzz-set-file> <base-url>
+usage: go-url-fuzzer [<flags>] <fuzz-set-file> <base-url>
 
-fuzz-set-file  File containing fuzz entry set, one entry per line
-base-url  Base url of the examined web
+Flags:
+  --help               Show help (also see --help-long and --help-man).
+  -h, --header=HEADER  Header=value, custom HTTP header added to every fuzz request
+  -m, --method=GET     HTTP method used in tests (GET, POST, PUT, DELETE, HEAD, OPTIONS)
+  -o, --output=OUTPUT  Output text file with found urls and statuses
+  -r, --report=REPORT  Target output directory of an url fuzzing HTML report
+  -t, --timeout=5000   Fuzzed url response timeout, in milliseconds
+  -w, --wait-period=0  Time wait period between fuzz tests per worker, in milliseconds
+  --version            Show application version.
 
-Options:
-  -h "Header: value", custom HTTP header added to every fuzz request
-  -m Comma-separated HTTP methods used in tests (GET, POST, PUT, DELETE, HEAD, OPTIONS)
-  -o Output text file with found urls and statuses
-  -r Target output directory of an url fuzzing HTML report
-  -t Fuzzed url response timeout, in seconds
-  -w Time wait period between fuzz tests per worker, in seconds
+Args:
+  <fuzz-set-file>  File containing fuzz entry set, one entry per line
+  <base-url>       Number of packets to send
+~~~
 
 Example:
-  go-url-fuzzer -h "User-Agent: curl" -h "Cookie: token=1" -m GET,POST -r target fuzz_entries.txt http://domain.tld/base/
-
+~~~
+  go-url-fuzzer -h "User-Agent: curl" -h "Cookie: token=1" -m "GET" -m "POST" -r target fuzz_entries.txt http://domain.tld/base/
 ~~~
 
 ## License
