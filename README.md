@@ -22,14 +22,18 @@ Discover hidden files and directories on a web server. The application tries to 
 usage: go-url-fuzzer [<flags>] <fuzz-set-file> <base-url>
 
 Flags:
-  --help               Show help (also see --help-long and --help-man).
-  -h, --header=HEADER  Header=value, custom HTTP header added to every fuzz request
-  -m, --method=GET     HTTP method used in tests (GET, POST, PUT, DELETE, HEAD, OPTIONS)
-  -o, --output=OUTPUT  Output text file with found urls and statuses
-  -r, --report=REPORT  Target output directory of an url fuzzing HTML report
-  -t, --timeout=5000   Fuzzed url response timeout, in milliseconds
-  -w, --wait-period=0  Time wait period between fuzz tests per worker, in milliseconds
-  --version            Show application version.
+  --help            Show help (also see --help-long and --help-man).
+  -h, --header="Name: value"
+                    Custom HTTP header added to every fuzz request, format: "name: value"
+  -m, --method=GET  HTTP method used in tests (GET, POST, PUT, DELETE, HEAD, OPTIONS)
+  -o, --output=output_file.txt
+                    Output text file with found urls and statuses
+  -r, --report=report_directory
+                    Target output directory of an url fuzzing HTML report
+  -t, --timeout=5s  Fuzzed url response timeout
+  -w, --wait-period=0s
+                    Time wait period between fuzz tests per worker
+  --version         Show application version.
 
 Args:
   <fuzz-set-file>  File containing fuzz entry set, one entry per line
