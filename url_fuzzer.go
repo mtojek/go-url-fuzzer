@@ -2,7 +2,6 @@ package main
 
 import (
 	"gopkg.in/alecthomas/kingpin.v2"
-	"fmt"
 )
 
 var (
@@ -19,5 +18,4 @@ var (
 func main() {
 	kingpin.UsageTemplate(kingpin.CompactUsageTemplate).Version("0.1").Author("Marcin Tojek")
 	kingpin.Parse()
-	fmt.Println(headers)
 }
