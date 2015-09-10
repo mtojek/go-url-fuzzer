@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/go-url-fuzzer/configuration"
+	"github.com/mtojek/go-url-fuzzer/configuration"
 )
 
 func main() {
