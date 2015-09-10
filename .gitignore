@@ -27,3 +27,7 @@ _testmain.go
 #
 .idea/
 *.iml
+
+# Binary
+#
+go-url-fuzzer
