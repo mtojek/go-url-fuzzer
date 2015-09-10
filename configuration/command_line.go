@@ -1,6 +1,8 @@
 package configuration
 
-import "gopkg.in/alecthomas/kingpin.v2"
+import (
+	"gopkg.in/alecthomas/kingpin.v2"
+)
 
 var (
 	headers            = kingpin.Flag("header", "Custom HTTP header added to every fuzz request, format: \"name: value\"").Short('h').PlaceHolder("\"Name: value\"").StringMap()
@@ -14,8 +16,27 @@ var (
 )
 
 func FromCommandLine() *Configuration {
+	parseCommandLine()
+	return createConfiguration()
+}
+
+func parseCommandLine() {
+	// TODO validator
 	kingpin.UsageTemplate(kingpin.CompactUsageTemplate).Version("0.1").Author("Marcin Tojek")
 	kingpin.Parse()
+}
 
-	return NewConfiguration()
+func createConfiguration() *Configuration {
+	aConfiguration := new(Configuration)
+	if headers != nil {
+		aConfiguration.Headers = *headers
+	}
+
+	if methods != nil {
+		aConfiguration.Methods = *methods
+	}
+
+	// TODO != nil
+
+	return aConfiguration
 }

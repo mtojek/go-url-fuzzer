@@ -15,7 +15,3 @@ type Configuration struct {
 	FuzzSetFile        string
 	BaseURL            url.URL
 }
-
-func NewConfiguration() *Configuration {
-	return new(Configuration)
-}
