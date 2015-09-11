@@ -13,8 +13,8 @@ test:
 	go test -v ./...
 	golint
 	go vet
-	test -z "$(go fmt)"
-	test -z "$(goimports -l .)"
+	test -z "`gofmt -d .`"
+	test -z "`goimports -l .`"
 
 prepare:
 	golint .
