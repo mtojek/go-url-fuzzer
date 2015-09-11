@@ -2,6 +2,7 @@ package configuration
 
 import (
 	"errors"
+
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 
