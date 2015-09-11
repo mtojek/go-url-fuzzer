@@ -2,8 +2,12 @@ package main
 
 import (
 	"github.com/mtojek/go-url-fuzzer/configuration"
+	"fmt"
 )
 
 func main() {
-	_ = configuration.FromCommandLine()
+	configurationFactory := configuration.NewConfigurationFactory()
+	configuration := configurationFactory.FromCommandLine()
+
+	fmt.Println(configuration)
 }
