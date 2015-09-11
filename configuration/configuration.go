@@ -2,8 +2,8 @@ package configuration
 
 import (
 	"net/url"
-	"time"
 	"os"
+	"time"
 )
 
 type Configuration struct {

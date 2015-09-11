@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/mtojek/go-url-fuzzer/configuration"
 	"fmt"
+	"github.com/mtojek/go-url-fuzzer/configuration"
 )
 
 func main() {
