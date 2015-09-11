@@ -1,4 +1,4 @@
-.PHONY: prepare test
+.PHONY: prepare install test
 
 build: go-get install test
 
