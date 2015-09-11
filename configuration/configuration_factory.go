@@ -14,7 +14,7 @@ func NewConfigurationFactory() *ConfigurationFactory {
 
 func (this *ConfigurationFactory) FromCommandLine() *Configuration {
 	configuration := this.createFlagsBoundConfiguration()
-	this.parseCommandLine()
+	this.parseFlagsArguments(configuration)
 	return configuration
 }
 
@@ -32,7 +32,7 @@ func (this *ConfigurationFactory) createFlagsBoundConfiguration() *Configuration
 	return configuration
 }
 
-func (this *ConfigurationFactory) parseCommandLine() {
+func (this *ConfigurationFactory) parseFlagsArguments(flagsBoundConfiguration *Configuration) {
 	kingpin.UsageTemplate(kingpin.CompactUsageTemplate).Version("0.1").Author("Marcin Tojek").Validate(this.validateFlagsArguments)
 	kingpin.Parse()
 }

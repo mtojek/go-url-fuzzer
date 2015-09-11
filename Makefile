@@ -1,3 +1,5 @@
+.PHONY: prepare test
+
 build: go-get install test
 
 go-get:
