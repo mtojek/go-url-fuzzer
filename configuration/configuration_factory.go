@@ -1,8 +1,6 @@
 package configuration
 
 import (
-	"errors"
-
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 
@@ -33,10 +31,7 @@ func (this *ConfigurationFactory) createFlagsBoundConfiguration() *Configuration
 }
 
 func (this *ConfigurationFactory) parseFlagsArguments(flagsBoundConfiguration *Configuration) {
-	kingpin.UsageTemplate(kingpin.CompactUsageTemplate).Version("0.1").Author("Marcin Tojek").Validate(this.validateFlagsArguments)
+	configurationValidator := newConfigurationValidator(flagsBoundConfiguration)
+	kingpin.UsageTemplate(kingpin.CompactUsageTemplate).Version("0.1").Author("Marcin Tojek").Validate(configurationValidator.validate)
 	kingpin.Parse()
-}
-
-func (this *ConfigurationFactory) validateFlagsArguments(*kingpin.Application) error {
-	return errors.New("blabla")
 }
