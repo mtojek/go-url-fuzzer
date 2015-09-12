@@ -1,4 +1,4 @@
-.PHONY: prepare install test
+.PHONY: test
 
 build: go-get install test
 
@@ -23,3 +23,6 @@ prepare:
 	go vet
 	gofmt -s -w .
 	goimports -w .
+
+dev: install
+	go-url-fuzzer -h "r: 1" -h "br:2" -m "POST" -m "GET" -m "PUT" Makefile http://httbase-url
