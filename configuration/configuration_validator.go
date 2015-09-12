@@ -46,7 +46,7 @@ func (this *configurationValidator) validateHeaders() error {
 }
 
 func (this *configurationValidator) validateMethods() error {
-	if nil != *this.configuration.methods && len(*this.configuration.methods) > 0 {
+	if nil != this.configuration.methods && len(*this.configuration.methods) > 0 {
 		configuredMethods := map[string]bool{}
 		for _, method := range *this.configuration.methods {
 			if _, exists := configuredMethods[method]; exists {
@@ -60,7 +60,7 @@ func (this *configurationValidator) validateMethods() error {
 }
 
 func (this *configurationValidator) validateBaseURL() error {
-	if nil != *this.configuration.baseURL && !(**this.configuration.baseURL).IsAbs() {
+	if nil != this.configuration.baseURL && nil != *this.configuration.baseURL && !(**this.configuration.baseURL).IsAbs() {
 		return errors.New(fmt.Sprintf("The base URL must be absolute, given: \"%v\".", (**this.configuration.baseURL).String()))
 	}
 	return nil
