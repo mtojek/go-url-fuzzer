@@ -13,7 +13,7 @@ Discover hidden files and directories on a web server. The application tries to 
 * Configurable number of fuzzing workers
 * Configurable time wait periods between fuzz tests per worker
 * Custom HTTP headers support
-* Different HTTP method support
+* Various HTTP methods support
 * HTML url fuzzing reports
 
 ## Usage
