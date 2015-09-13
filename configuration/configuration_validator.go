@@ -65,3 +65,12 @@ func (this *configurationValidator) validateBaseURL() error {
 	}
 	return nil
 }
+
+func (this *configurationValidator) validateWorkersNumber() error {
+	if nil != this.configuration.workersNumber {
+		if *this.configuration.workersNumber == 0 {
+			return errors.New("There must be at least one worker.")
+		}
+	}
+	return nil
+}

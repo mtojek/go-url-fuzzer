@@ -12,6 +12,7 @@ type Configuration struct {
 	outputFile         *string
 	reportDirectory    *string
 	urlResponseTimeout *time.Duration
+	workersNumber      *uint64
 	workerWaitPeriod   *time.Duration
 	fuzzSetFile        **os.File
 	baseURL            **url.URL
@@ -56,6 +57,14 @@ func (this *Configuration) ReportDirectory() (result string, exists bool) {
 func (this *Configuration) UrlResponseTimeout() (result time.Duration, exists bool) {
 	if this.urlResponseTimeout != nil {
 		result = *this.urlResponseTimeout
+		exists = true
+	}
+	return result, exists
+}
+
+func (this *Configuration) WorkersNumber() (result uint64, exists bool) {
+	if this.workersNumber != nil {
+		result = *this.workersNumber
 		exists = true
 	}
 	return result, exists

@@ -31,6 +31,8 @@ Flags:
   -r, --report=report_directory
                     Target output directory of an url fuzzing HTML report
   -t, --timeout=5s  Fuzzed url response timeout
+  -n, --workers-number=5
+                    Number of workers
   -w, --wait-period=0s
                     Time wait period between fuzz tests per worker
   --version         Show application version.
