@@ -39,34 +39,64 @@ func TestHeadersNotAvailable(t *testing.T) {
 	assert.False(exists)
 }
 
-func TestMethodsAvailable(t *testing.T) {
+func TestOutputFileAvailable(t *testing.T) {
 	assert := assert.New(t)
 
 	// given
-	method := "a_method"
-	expectedMethods := []string{method}
+	expectedOutputFile := "output_file.ext"
 
 	sut := newConfiguration()
-	sut.methods = &expectedMethods
+	sut.outputFile = &expectedOutputFile
 
 	// when
-	actualMethods, exists := sut.Methods()
+	actualOutputFile, exists := sut.OutputFile()
 
 	// then
-	assert.Equal(actualMethods, expectedMethods, "Assgined different methods.")
+	assert.Equal(actualOutputFile, expectedOutputFile, "Assgined different output files.")
 	assert.True(exists)
 }
 
-func TestMethodsNotAvailable(t *testing.T) {
+func TestOutputFileNotAvailable(t *testing.T) {
 	assert := assert.New(t)
 
 	// given
 	sut := newConfiguration()
 
 	// when
-	actualMethods, exists := sut.Headers()
+	actualOutputFile, exists := sut.OutputFile()
 
 	// then
-	assert.Empty(actualMethods, "Methods should be empty.")
+	assert.Empty(actualOutputFile, "Output file should be empty.")
+	assert.False(exists)
+}
+
+func TestReportDirectoryAvailable(t *testing.T) {
+	assert := assert.New(t)
+
+	// given
+	expectedReportDirectory := "report_directory"
+
+	sut := newConfiguration()
+	sut.reportDirectory = &expectedReportDirectory
+
+	// when
+	actualReportDirectory, exists := sut.ReportDirectory()
+
+	// then
+	assert.Equal(actualReportDirectory, expectedReportDirectory, "Assgined different report directories.")
+	assert.True(exists)
+}
+
+func TestReportDirectoryNotAvailable(t *testing.T) {
+	assert := assert.New(t)
+
+	// given
+	sut := newConfiguration()
+
+	// when
+	actualReportDirectory, exists := sut.ReportDirectory()
+
+	// then
+	assert.Empty(actualReportDirectory, "Report directory should be empty.")
 	assert.False(exists)
 }

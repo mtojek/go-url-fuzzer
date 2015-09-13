@@ -30,12 +30,8 @@ func (this *Configuration) Headers() (result map[string]string, exists bool) {
 	return result, exists
 }
 
-func (this *Configuration) Methods() (result []string, exists bool) {
-	if this.methods != nil {
-		result = *this.methods
-		exists = true
-	}
-	return result, exists
+func (this *Configuration) Methods() []string {
+	return *this.methods
 }
 
 func (this *Configuration) OutputFile() (result string, exists bool) {
@@ -54,28 +50,16 @@ func (this *Configuration) ReportDirectory() (result string, exists bool) {
 	return result, exists
 }
 
-func (this *Configuration) UrlResponseTimeout() (result time.Duration, exists bool) {
-	if this.urlResponseTimeout != nil {
-		result = *this.urlResponseTimeout
-		exists = true
-	}
-	return result, exists
+func (this *Configuration) UrlResponseTimeout() time.Duration {
+	return *this.urlResponseTimeout
 }
 
-func (this *Configuration) WorkersNumber() (result uint64, exists bool) {
-	if this.workersNumber != nil {
-		result = *this.workersNumber
-		exists = true
-	}
-	return result, exists
+func (this *Configuration) WorkersNumber() uint64 {
+	return *this.workersNumber
 }
 
-func (this *Configuration) WorkerWaitPeriod() (result time.Duration, exists bool) {
-	if this.workerWaitPeriod != nil {
-		result = *this.workerWaitPeriod
-		exists = true
-	}
-	return result, exists
+func (this *Configuration) WorkerWaitPeriod() time.Duration {
+	return *this.workerWaitPeriod
 }
 
 func (this *Configuration) FuzzSetFile() os.File {
