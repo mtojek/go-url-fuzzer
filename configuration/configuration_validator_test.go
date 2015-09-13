@@ -72,8 +72,8 @@ func TestRelativeBaseUrl(t *testing.T) {
 	configuration := newConfiguration()
 	configuration.headers = &map[string]string{"a_header": "a_value"}
 	configuration.methods = &[]string{"PUT", "POST", "OPTIONS"}
-	var zero uint64 = 1
-	configuration.workersNumber = &zero
+	var one uint64 = 1
+	configuration.workersNumber = &one
 	relativeUrl, _ := url.Parse("relative/url/1/2/3")
 	configuration.baseURL = &relativeUrl
 	sut := newConfigurationValidator(configuration)
@@ -94,8 +94,8 @@ func TestValidConfiguration(t *testing.T) {
 	configuration := newConfiguration()
 	configuration.headers = &map[string]string{"a_header": "a_value"}
 	configuration.methods = &[]string{"PUT", "POST", "OPTIONS"}
-	var zero uint64 = 1
-	configuration.workersNumber = &zero
+	var one uint64 = 1
+	configuration.workersNumber = &one
 	relativeUrl, _ := url.Parse("http://relative/url/1/2/3")
 	configuration.baseURL = &relativeUrl
 	sut := newConfigurationValidator(configuration)
