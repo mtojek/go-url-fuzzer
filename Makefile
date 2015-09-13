@@ -6,13 +6,14 @@ go-get:
 	go get golang.org/x/tools/cmd/vet
 	go get github.com/golang/lint/golint
 	go get golang.org/x/tools/cmd/goimports
-	go get gopkg.in/alecthomas/kingpin.v2 
+	go get gopkg.in/alecthomas/kingpin.v2
+	go get github.com/stretchr/testify
 
 install:
 	go get -t -v ./...
 
 test:
-	go test -v ./...
+	go test ./...
 	golint
 	go vet
 	test -z "`gofmt -d .`"

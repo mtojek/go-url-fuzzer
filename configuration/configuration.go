@@ -78,18 +78,10 @@ func (this *Configuration) WorkerWaitPeriod() (result time.Duration, exists bool
 	return result, exists
 }
 
-func (this *Configuration) FuzzSetFile() (result os.File, exists bool) {
-	if this.fuzzSetFile != nil && (*this.fuzzSetFile) != nil {
-		result = **this.fuzzSetFile
-		exists = true
-	}
-	return result, exists
+func (this *Configuration) FuzzSetFile() os.File {
+	return **this.fuzzSetFile
 }
 
-func (this *Configuration) BaseURL() (result url.URL, exists bool) {
-	if this.baseURL != nil && (*this.baseURL) != nil {
-		result = **this.baseURL
-		exists = true
-	}
-	return result, exists
+func (this *Configuration) BaseURL() url.URL {
+	return **this.baseURL
 }
