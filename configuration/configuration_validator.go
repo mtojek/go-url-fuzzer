@@ -1,19 +1,15 @@
 package configuration
 
-import (
-	"errors"
-
-	"fmt"
-
-	"gopkg.in/alecthomas/kingpin.v2"
-)
+import "gopkg.in/alecthomas/kingpin.v2"
 
 type configurationValidator struct {
-	configuration *Configuration
+	configuration  *Configuration
+	errorTagMapper errorTagMapper
 }
 
 func newConfigurationValidator(configuration *Configuration) *configurationValidator {
-	return &configurationValidator{configuration: configuration}
+	errorTagMapper := newConfigurationValidationErrorMapper()
+	return &configurationValidator{configuration: configuration, errorTagMapper: errorTagMapper}
 }
 
 func (this *configurationValidator) validate(*kingpin.Application) error {
@@ -42,7 +38,7 @@ func (this *configurationValidator) validateHeaders() error {
 	if nil != this.configuration.headers {
 		for headerName, headerValue := range *this.configuration.headers {
 			if headerValue == "" {
-				return errors.New(fmt.Sprintf("Missing header value for header \"%v\".", headerName))
+				return this.errorTagMapper.mapErrorTag(missingHeaderValueError, headerName)
 			}
 		}
 	}
@@ -54,7 +50,7 @@ func (this *configurationValidator) validateMethods() error {
 		configuredMethods := map[string]bool{}
 		for _, method := range *this.configuration.methods {
 			if _, exists := configuredMethods[method]; exists {
-				return errors.New(fmt.Sprintf("HTTP methods must not repeat themselves, repeated: \"%v\".", method))
+				return this.errorTagMapper.mapErrorTag(repeatedHttpMethodError, method)
 			} else {
 				configuredMethods[method] = true
 			}
@@ -65,7 +61,7 @@ func (this *configurationValidator) validateMethods() error {
 
 func (this *configurationValidator) validateBaseURL() error {
 	if nil != this.configuration.baseURL && nil != *this.configuration.baseURL && !(**this.configuration.baseURL).IsAbs() {
-		return errors.New(fmt.Sprintf("The base URL must be absolute, given: \"%v\".", (**this.configuration.baseURL).String()))
+		return this.errorTagMapper.mapErrorTag(relativeBaseUrlError, (**this.configuration.baseURL).String())
 	}
 	return nil
 }
@@ -73,7 +69,7 @@ func (this *configurationValidator) validateBaseURL() error {
 func (this *configurationValidator) validateWorkersNumber() error {
 	if nil != this.configuration.workersNumber {
 		if *this.configuration.workersNumber == 0 {
-			return errors.New("There must be at least one worker.")
+			return this.errorTagMapper.mapErrorTag(zeroWorkersNumberError)
 		}
 	}
 	return nil
