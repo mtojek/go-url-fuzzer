@@ -22,7 +22,7 @@ func TestHeadersAvailable(t *testing.T) {
 
 	// then
 	assert.Equal(actualHeaders, expectedHeaders, "Assgined different headers.")
-	assert.True(exists)
+	assert.True(exists, "Value should exist")
 }
 
 func TestHeadersNotAvailable(t *testing.T) {
@@ -36,7 +36,7 @@ func TestHeadersNotAvailable(t *testing.T) {
 
 	// then
 	assert.Empty(actualHeaders, "Headers should be empty.")
-	assert.False(exists)
+	assert.False(exists, "Value should not exist")
 }
 
 func TestOutputFileAvailable(t *testing.T) {
@@ -53,7 +53,7 @@ func TestOutputFileAvailable(t *testing.T) {
 
 	// then
 	assert.Equal(actualOutputFile, expectedOutputFile, "Assgined different output files.")
-	assert.True(exists)
+	assert.True(exists, "Value should exist")
 }
 
 func TestOutputFileNotAvailable(t *testing.T) {
@@ -67,7 +67,7 @@ func TestOutputFileNotAvailable(t *testing.T) {
 
 	// then
 	assert.Empty(actualOutputFile, "Output file should be empty.")
-	assert.False(exists)
+	assert.False(exists, "Value should not exist")
 }
 
 func TestReportDirectoryAvailable(t *testing.T) {
@@ -84,7 +84,7 @@ func TestReportDirectoryAvailable(t *testing.T) {
 
 	// then
 	assert.Equal(actualReportDirectory, expectedReportDirectory, "Assgined different report directories.")
-	assert.True(exists)
+	assert.True(exists, "Value should exist")
 }
 
 func TestReportDirectoryNotAvailable(t *testing.T) {
@@ -98,5 +98,5 @@ func TestReportDirectoryNotAvailable(t *testing.T) {
 
 	// then
 	assert.Empty(actualReportDirectory, "Report directory should be empty.")
-	assert.False(exists)
+	assert.False(exists, "Value should not exist")
 }

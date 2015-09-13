@@ -59,18 +59,18 @@ func (this *configurationValidator) validateMethods() error {
 	return nil
 }
 
-func (this *configurationValidator) validateBaseURL() error {
-	if nil != this.configuration.baseURL && nil != *this.configuration.baseURL && !(**this.configuration.baseURL).IsAbs() {
-		return this.errorTagMapper.mapErrorTag(relativeBaseUrlError, (**this.configuration.baseURL).String())
-	}
-	return nil
-}
-
 func (this *configurationValidator) validateWorkersNumber() error {
 	if nil != this.configuration.workersNumber {
 		if *this.configuration.workersNumber == 0 {
 			return this.errorTagMapper.mapErrorTag(zeroWorkersNumberError)
 		}
+	}
+	return nil
+}
+
+func (this *configurationValidator) validateBaseURL() error {
+	if nil != this.configuration.baseURL && nil != *this.configuration.baseURL && !(**this.configuration.baseURL).IsAbs() {
+		return this.errorTagMapper.mapErrorTag(relativeBaseUrlError, (**this.configuration.baseURL).String())
 	}
 	return nil
 }
