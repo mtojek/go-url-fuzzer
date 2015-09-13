@@ -7,8 +7,11 @@ import (
 )
 
 func main() {
-	configurationFactory := configuration.NewConfigurationFactory()
-	configuration := configurationFactory.FromCommandLine()
-
+	configuration := readConfiguration()
 	fmt.Println(configuration)
+}
+
+func readConfiguration() *configuration.Configuration {
+	configurationFactory := configuration.NewConfigurationFactory()
+	return configurationFactory.FromCommandLine()
 }
