@@ -27,6 +27,10 @@ func (this *configurationValidator) validate(*kingpin.Application) error {
 		return error
 	}
 
+	if error = this.validateWorkersNumber(); nil != error {
+		return error
+	}
+
 	if error = this.validateBaseURL(); nil != error {
 		return error
 	}
