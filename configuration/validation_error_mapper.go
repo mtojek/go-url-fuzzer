@@ -20,22 +20,22 @@ const (
 	unknownErrorMessage            = "Unknown error occurred."
 )
 
-type configurationValidationErrorMapper struct {
+type validationErrorMapper struct {
 	validationErrorMappings map[int]string
 }
 
-func newConfigurationValidationErrorMapper() *configurationValidationErrorMapper {
+func newValidationErrorMapper() *validationErrorMapper {
 	validationErrorMappings := map[int]string{
 		missingHeaderValueError: missingHeaderValueErrorMessage,
 		repeatedHTTPMethodError: repeatedHTTPMethodErrorMessage,
 		relativeBaseURLError:    relativeBaseURLErrorMessage,
 		zeroWorkersNumberError:  zeroWorkersNumberErrorMessage,
 	}
-	return &configurationValidationErrorMapper{validationErrorMappings}
+	return &validationErrorMapper{validationErrorMappings}
 }
 
-func (configurationValidationErrorMapper *configurationValidationErrorMapper) mapErrorTag(tag int, values ...interface{}) error {
-	if errorMessage, exists := configurationValidationErrorMapper.validationErrorMappings[tag]; exists {
+func (validationErrorMapper *validationErrorMapper) mapErrorTag(tag int, values ...interface{}) error {
+	if errorMessage, exists := validationErrorMapper.validationErrorMappings[tag]; exists {
 		return fmt.Errorf(errorMessage, values)
 	}
 	return errors.New(unknownErrorMessage)

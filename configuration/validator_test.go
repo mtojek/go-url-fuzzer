@@ -16,7 +16,7 @@ func TestInvalidHeaders(t *testing.T) {
 	// given
 	configuration := newConfiguration()
 	configuration.headers = &map[string]string{"a_header": ""}
-	sut := newConfigurationValidator(configuration)
+	sut := newValidator(configuration)
 	sut.errorTagMapper = newMockedErrorTagMapper()
 
 	// when
@@ -34,7 +34,7 @@ func TestRepeatedMethods(t *testing.T) {
 	configuration := newConfiguration()
 	configuration.headers = &map[string]string{"a_header": "a_value"}
 	configuration.methods = &[]string{"PUT", "POST", "PUT", "OPTIONS"}
-	sut := newConfigurationValidator(configuration)
+	sut := newValidator(configuration)
 	sut.errorTagMapper = newMockedErrorTagMapper()
 
 	// when
@@ -54,7 +54,7 @@ func TestZeroWorkersNumber(t *testing.T) {
 	configuration.methods = &[]string{"PUT", "POST", "OPTIONS"}
 	var zero uint64
 	configuration.workersNumber = &zero
-	sut := newConfigurationValidator(configuration)
+	sut := newValidator(configuration)
 	sut.errorTagMapper = newMockedErrorTagMapper()
 
 	// when
@@ -76,7 +76,7 @@ func TestRelativeBaseUrl(t *testing.T) {
 	configuration.workersNumber = &one
 	relativeURL, _ := url.Parse("relative/url/1/2/3")
 	configuration.baseURL = &relativeURL
-	sut := newConfigurationValidator(configuration)
+	sut := newValidator(configuration)
 	sut.errorTagMapper = newMockedErrorTagMapper()
 
 	// when
@@ -98,7 +98,7 @@ func TestValidConfiguration(t *testing.T) {
 	configuration.workersNumber = &one
 	relativeURL, _ := url.Parse("http://relative/url/1/2/3")
 	configuration.baseURL = &relativeURL
-	sut := newConfigurationValidator(configuration)
+	sut := newValidator(configuration)
 	sut.errorTagMapper = newMockedErrorTagMapper()
 
 	// when

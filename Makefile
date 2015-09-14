@@ -28,7 +28,7 @@ test:
 	test -z "`gofmt -d .`"
 	test -z "`goimports -l .`"
 
-prepare:
+cc: #cleancode
 	gofmt -s -w .
 	goimports -w .
 

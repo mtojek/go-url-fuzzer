@@ -11,7 +11,7 @@ func TestMapUnknownErrorTag(t *testing.T) {
 
 	// given
 	const nonExistingTag = 666999666
-	sut := newConfigurationValidationErrorMapper()
+	sut := newValidationErrorMapper()
 
 	// when
 	result := sut.mapErrorTag(nonExistingTag)

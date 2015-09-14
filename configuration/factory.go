@@ -35,7 +35,7 @@ func (factory *Factory) createFlagsBoundConfiguration() *Configuration {
 }
 
 func (factory *Factory) parseFlagsArguments(flagsBoundConfiguration *Configuration) {
-	configurationValidator := newConfigurationValidator(flagsBoundConfiguration)
+	configurationValidator := newValidator(flagsBoundConfiguration)
 	kingpin.UsageTemplate(kingpin.CompactUsageTemplate).Version("0.1").Author("Marcin Tojek").Validate(configurationValidator.validate)
 	kingpin.Parse()
 }
