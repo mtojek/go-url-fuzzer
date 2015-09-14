@@ -6,12 +6,18 @@ import (
 	"github.com/mtojek/go-url-fuzzer/configuration"
 )
 
-func main() {
-	configuration := readConfiguration()
+type urlFuzzer struct{}
+
+func newURLFuzzer() *urlFuzzer {
+	return new(urlFuzzer)
+}
+
+func (urlFuzzer *urlFuzzer) run() {
+	configuration := urlFuzzer.readConfiguration()
 	fmt.Println(configuration)
 }
 
-func readConfiguration() *configuration.Configuration {
-	configurationFactory := configuration.NewConfigurationFactory()
+func (urlFuzzer *urlFuzzer) readConfiguration() *configuration.Configuration {
+	configurationFactory := configuration.NewFactory()
 	return configurationFactory.FromCommandLine()
 }

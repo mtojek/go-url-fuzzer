@@ -14,13 +14,13 @@ install:
 
 test:
 	go test -v ./...
-	golint
+	golint ./...
 	go vet
 	test -z "`gofmt -d .`"
 	test -z "`goimports -l .`"
 
 prepare:
-	golint .
+	golint ./...
 	go vet
 	gofmt -s -w .
 	goimports -w .

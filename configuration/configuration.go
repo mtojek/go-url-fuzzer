@@ -6,6 +6,7 @@ import (
 	"time"
 )
 
+// Configuration of the application
 type Configuration struct {
 	headers            *map[string]string
 	methods            *[]string
@@ -22,50 +23,59 @@ func newConfiguration() *Configuration {
 	return new(Configuration)
 }
 
-func (this *Configuration) Headers() (result map[string]string, exists bool) {
-	if this.headers != nil {
-		result = *this.headers
+// Headers method returns HTTP headers.
+func (configuration *Configuration) Headers() (result map[string]string, exists bool) {
+	if configuration.headers != nil {
+		result = *configuration.headers
 		exists = true
 	}
 	return result, exists
 }
 
-func (this *Configuration) Methods() []string {
-	return *this.methods
+// Methods returns unique HTTP methods.
+func (configuration *Configuration) Methods() []string {
+	return *configuration.methods
 }
 
-func (this *Configuration) OutputFile() (result string, exists bool) {
-	if this.outputFile != nil {
-		result = *this.outputFile
+// OutputFile method returns a path of the text output file.
+func (configuration *Configuration) OutputFile() (result string, exists bool) {
+	if configuration.outputFile != nil {
+		result = *configuration.outputFile
 		exists = true
 	}
 	return result, exists
 }
 
-func (this *Configuration) ReportDirectory() (result string, exists bool) {
-	if this.reportDirectory != nil {
-		result = *this.reportDirectory
+// ReportDirectory method returns a target directory of HTML report files.
+func (configuration *Configuration) ReportDirectory() (result string, exists bool) {
+	if configuration.reportDirectory != nil {
+		result = *configuration.reportDirectory
 		exists = true
 	}
 	return result, exists
 }
 
-func (this *Configuration) UrlResponseTimeout() time.Duration {
-	return *this.urlResponseTimeout
+// URLResponseTimeout method returns fuzzed URL response timeout.
+func (configuration *Configuration) URLResponseTimeout() time.Duration {
+	return *configuration.urlResponseTimeout
 }
 
-func (this *Configuration) WorkersNumber() uint64 {
-	return *this.workersNumber
+// WorkersNumber returns a number of active fuzzing workers.
+func (configuration *Configuration) WorkersNumber() uint64 {
+	return *configuration.workersNumber
 }
 
-func (this *Configuration) WorkerWaitPeriod() time.Duration {
-	return *this.workerWaitPeriod
+// WorkerWaitPeriod returns a period of time between two fuzzed requests per worker.
+func (configuration *Configuration) WorkerWaitPeriod() time.Duration {
+	return *configuration.workerWaitPeriod
 }
 
-func (this *Configuration) FuzzSetFile() os.File {
-	return **this.fuzzSetFile
+// FuzzSetFile returns a file with fuzzed relative URLs.
+func (configuration *Configuration) FuzzSetFile() os.File {
+	return **configuration.fuzzSetFile
 }
 
-func (this *Configuration) BaseURL() url.URL {
-	return **this.baseURL
+// BaseURL returns a base URL of the target website.
+func (configuration *Configuration) BaseURL() url.URL {
+	return **configuration.baseURL
 }

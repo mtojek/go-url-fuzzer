@@ -12,9 +12,10 @@ func TestReadConfiguration(t *testing.T) {
 
 	// given
 	setCommandLineArgs("fuzzset/fuzz_01.txt", "http://domain.tld/")
+	sut := newURLFuzzer()
 
 	// when
-	configuration := readConfiguration()
+	configuration := sut.readConfiguration()
 
 	// then
 	assert.NotNil(configuration, "Simple configuration should be read from command line.")

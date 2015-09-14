@@ -12,65 +12,64 @@ func newConfigurationValidator(configuration *Configuration) *configurationValid
 	return &configurationValidator{configuration: configuration, errorTagMapper: errorTagMapper}
 }
 
-func (this *configurationValidator) validate(*kingpin.Application) error {
+func (configurationValidator *configurationValidator) validate(*kingpin.Application) error {
 	var error error
 
-	if error = this.validateHeaders(); nil != error {
+	if error = configurationValidator.validateHeaders(); nil != error {
 		return error
 	}
 
-	if error = this.validateMethods(); nil != error {
+	if error = configurationValidator.validateMethods(); nil != error {
 		return error
 	}
 
-	if error = this.validateWorkersNumber(); nil != error {
+	if error = configurationValidator.validateWorkersNumber(); nil != error {
 		return error
 	}
 
-	if error = this.validateBaseURL(); nil != error {
+	if error = configurationValidator.validateBaseURL(); nil != error {
 		return error
 	}
 
 	return nil
 }
 
-func (this *configurationValidator) validateHeaders() error {
-	if nil != this.configuration.headers {
-		for headerName, headerValue := range *this.configuration.headers {
+func (configurationValidator *configurationValidator) validateHeaders() error {
+	if nil != configurationValidator.configuration.headers {
+		for headerName, headerValue := range *configurationValidator.configuration.headers {
 			if headerValue == "" {
-				return this.errorTagMapper.mapErrorTag(missingHeaderValueError, headerName)
+				return configurationValidator.errorTagMapper.mapErrorTag(missingHeaderValueError, headerName)
 			}
 		}
 	}
 	return nil
 }
 
-func (this *configurationValidator) validateMethods() error {
-	if nil != this.configuration.methods && len(*this.configuration.methods) > 0 {
+func (configurationValidator *configurationValidator) validateMethods() error {
+	if nil != configurationValidator.configuration.methods && len(*configurationValidator.configuration.methods) > 0 {
 		configuredMethods := map[string]bool{}
-		for _, method := range *this.configuration.methods {
+		for _, method := range *configurationValidator.configuration.methods {
 			if _, exists := configuredMethods[method]; exists {
-				return this.errorTagMapper.mapErrorTag(repeatedHttpMethodError, method)
-			} else {
-				configuredMethods[method] = true
+				return configurationValidator.errorTagMapper.mapErrorTag(repeatedHTTPMethodError, method)
 			}
+			configuredMethods[method] = true
 		}
 	}
 	return nil
 }
 
-func (this *configurationValidator) validateWorkersNumber() error {
-	if nil != this.configuration.workersNumber {
-		if *this.configuration.workersNumber == 0 {
-			return this.errorTagMapper.mapErrorTag(zeroWorkersNumberError)
+func (configurationValidator *configurationValidator) validateWorkersNumber() error {
+	if nil != configurationValidator.configuration.workersNumber {
+		if *configurationValidator.configuration.workersNumber == 0 {
+			return configurationValidator.errorTagMapper.mapErrorTag(zeroWorkersNumberError)
 		}
 	}
 	return nil
 }
 
-func (this *configurationValidator) validateBaseURL() error {
-	if nil != this.configuration.baseURL && nil != *this.configuration.baseURL && !(**this.configuration.baseURL).IsAbs() {
-		return this.errorTagMapper.mapErrorTag(relativeBaseUrlError, (**this.configuration.baseURL).String())
+func (configurationValidator *configurationValidator) validateBaseURL() error {
+	if nil != configurationValidator.configuration.baseURL && nil != *configurationValidator.configuration.baseURL && !(**configurationValidator.configuration.baseURL).IsAbs() {
+		return configurationValidator.errorTagMapper.mapErrorTag(relativeBaseURLError, (**configurationValidator.configuration.baseURL).String())
 	}
 	return nil
 }

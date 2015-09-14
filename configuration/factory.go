@@ -4,19 +4,22 @@ import (
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 
-type ConfigurationFactory struct{}
+// Factory allows for creating a struct representing configuration.
+type Factory struct{}
 
-func NewConfigurationFactory() *ConfigurationFactory {
-	return new(ConfigurationFactory)
+// NewFactory returns a new instance of configuration factory
+func NewFactory() *Factory {
+	return new(Factory)
 }
 
-func (this *ConfigurationFactory) FromCommandLine() *Configuration {
-	configuration := this.createFlagsBoundConfiguration()
-	this.parseFlagsArguments(configuration)
+// FromCommandLine returns a configuration created from the command line parameters.
+func (factory *Factory) FromCommandLine() *Configuration {
+	configuration := factory.createFlagsBoundConfiguration()
+	factory.parseFlagsArguments(configuration)
 	return configuration
 }
 
-func (this *ConfigurationFactory) createFlagsBoundConfiguration() *Configuration {
+func (factory *Factory) createFlagsBoundConfiguration() *Configuration {
 	configuration := newConfiguration()
 	configuration.headers = kingpin.Flag("header", "Custom HTTP header added to every fuzz request, format: \"name: value\"").Short('h').PlaceHolder("\"Name: value\"").StringMap()
 	configuration.methods = kingpin.Flag("method", "HTTP method used in tests (GET, POST, PUT, DELETE, HEAD, OPTIONS)").Short('m').Default("GET").Enums("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS")
@@ -31,7 +34,7 @@ func (this *ConfigurationFactory) createFlagsBoundConfiguration() *Configuration
 	return configuration
 }
 
-func (this *ConfigurationFactory) parseFlagsArguments(flagsBoundConfiguration *Configuration) {
+func (factory *Factory) parseFlagsArguments(flagsBoundConfiguration *Configuration) {
 	configurationValidator := newConfigurationValidator(flagsBoundConfiguration)
 	kingpin.UsageTemplate(kingpin.CompactUsageTemplate).Version("0.1").Author("Marcin Tojek").Validate(configurationValidator.validate)
 	kingpin.Parse()

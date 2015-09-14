@@ -10,7 +10,7 @@ func TestCreateFlagsBoundConfiguration(t *testing.T) {
 	assert := assert.New(t)
 
 	// given
-	sut := NewConfigurationFactory()
+	sut := NewFactory()
 
 	// when
 	result := sut.createFlagsBoundConfiguration()
