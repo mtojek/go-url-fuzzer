@@ -19,7 +19,10 @@ Discover hidden files and directories on a web server. The application tries to 
 ## Usage
 
 ~~~
+$ go-url-fuzzer --help
 usage: go-url-fuzzer [<flags>] <fuzz-set-file> <base-url>
+
+Discover hidden files and directories on a web server.
 
 Flags:
   --help            Show help (also see --help-long and --help-man).

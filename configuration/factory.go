@@ -37,5 +37,7 @@ func (factory *Factory) createFlagsBoundConfiguration() *Configuration {
 func (factory *Factory) parseFlagsArguments(flagsBoundConfiguration *Configuration) {
 	configurationValidator := newValidator(flagsBoundConfiguration)
 	kingpin.UsageTemplate(kingpin.CompactUsageTemplate).Version("0.1").Author("Marcin Tojek").Validate(configurationValidator.validate)
+	kingpin.CommandLine.Name = "go-url-fuzzer"
+	kingpin.CommandLine.Help = "Discover hidden files and directories on a web server."
 	kingpin.Parse()
 }
