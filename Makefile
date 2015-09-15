@@ -24,7 +24,7 @@ test:
 	go list ./... | sed -e 's;github.com/mtojek/go-url-fuzzer;.;' | xargs varcheck
 	go list ./... | sed -e 's;github.com/mtojek/go-url-fuzzer;.;' | xargs structcheck
 	golint ./...
-	go vet -x ./...
+	go tool vet -v=true .
 	test -z "`gofmt -d .`"
 	test -z "`goimports -l .`"
 
