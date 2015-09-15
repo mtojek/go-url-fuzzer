@@ -1,6 +1,6 @@
 package flow
 
-import "github.com/trustmaster/goflow"
+import "github.com/mtojek/goflow"
 
 // Fuzz wraps flow.Graph abstraction.
 type Fuzz struct {

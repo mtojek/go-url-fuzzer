@@ -2,7 +2,7 @@ package httpmethod
 
 import (
 	"github.com/mtojek/go-url-fuzzer/configuration"
-	"github.com/trustmaster/goflow"
+	"github.com/mtojek/goflow"
 )
 
 // EntryProducer consumes relative URLs and produces whole entries including mentioned URLs and HTTP methods.
