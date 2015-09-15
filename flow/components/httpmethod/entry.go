@@ -6,9 +6,8 @@ type Entry struct {
 	httpMethod  string
 }
 
-// NewEntry creates a new instance of Entry.
-func NewEntry() *Entry {
-	return new(Entry)
+func newEntry(relativeURL, httpMethod string) Entry {
+	return Entry{relativeURL: relativeURL, httpMethod: httpMethod}
 }
 
 // RelativeURL returns a relative url to be fuzzed.
