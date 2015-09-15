@@ -10,7 +10,7 @@ go-get:
 	go get github.com/opennota/check/cmd/structcheck
 	go get github.com/opennota/check/cmd/varcheck
 
-	go get github.com/trustmaster/goflow
+	go get github.com/mtojek/goflow
 	go get gopkg.in/alecthomas/kingpin.v2
 	go get github.com/stretchr/testify
 
