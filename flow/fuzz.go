@@ -14,6 +14,6 @@ func NewFuzz() *Fuzz {
 }
 
 // Start methods starts the flow.
-func (fuzz *Fuzz) Start() {
-	fuzz.graph.InitGraphState()
+func (f *Fuzz) Start() {
+	f.graph.InitGraphState()
 }

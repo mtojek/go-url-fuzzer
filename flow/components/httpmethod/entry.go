@@ -12,11 +12,11 @@ func NewEntry() *Entry {
 }
 
 // RelativeURL returns a relative url to be fuzzed.
-func (entry *Entry) RelativeURL() string {
-	return entry.relativeURL
+func (e *Entry) RelativeURL() string {
+	return e.relativeURL
 }
 
 // HTTPMethod returns a HTTP method which will be used in fuzzing.
-func (entry *Entry) HTTPMethod() string {
-	return entry.httpMethod
+func (e *Entry) HTTPMethod() string {
+	return e.httpMethod
 }

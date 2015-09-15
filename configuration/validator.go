@@ -12,45 +12,45 @@ func newValidator(configuration *Configuration) *validator {
 	return &validator{configuration: configuration, errorTagMapper: errorTagMapper}
 }
 
-func (validator *validator) validate(*kingpin.Application) error {
+func (v *validator) validate(*kingpin.Application) error {
 	var error error
 
-	if error = validator.validateHeaders(); nil != error {
+	if error = v.validateHeaders(); nil != error {
 		return error
 	}
 
-	if error = validator.validateMethods(); nil != error {
+	if error = v.validateMethods(); nil != error {
 		return error
 	}
 
-	if error = validator.validateWorkersNumber(); nil != error {
+	if error = v.validateWorkersNumber(); nil != error {
 		return error
 	}
 
-	if error = validator.validateBaseURL(); nil != error {
+	if error = v.validateBaseURL(); nil != error {
 		return error
 	}
 
 	return nil
 }
 
-func (validator *validator) validateHeaders() error {
-	if nil != validator.configuration.headers {
-		for headerName, headerValue := range *validator.configuration.headers {
+func (v *validator) validateHeaders() error {
+	if nil != v.configuration.headers {
+		for headerName, headerValue := range *v.configuration.headers {
 			if headerValue == "" {
-				return validator.errorTagMapper.mapErrorTag(missingHeaderValueError, headerName)
+				return v.errorTagMapper.mapErrorTag(missingHeaderValueError, headerName)
 			}
 		}
 	}
 	return nil
 }
 
-func (validator *validator) validateMethods() error {
-	if nil != validator.configuration.methods && len(*validator.configuration.methods) > 0 {
+func (v *validator) validateMethods() error {
+	if nil != v.configuration.methods && len(*v.configuration.methods) > 0 {
 		configuredMethods := map[string]bool{}
-		for _, method := range *validator.configuration.methods {
+		for _, method := range *v.configuration.methods {
 			if _, exists := configuredMethods[method]; exists {
-				return validator.errorTagMapper.mapErrorTag(repeatedHTTPMethodError, method)
+				return v.errorTagMapper.mapErrorTag(repeatedHTTPMethodError, method)
 			}
 			configuredMethods[method] = true
 		}
@@ -58,18 +58,18 @@ func (validator *validator) validateMethods() error {
 	return nil
 }
 
-func (validator *validator) validateWorkersNumber() error {
-	if nil != validator.configuration.workersNumber {
-		if *validator.configuration.workersNumber == 0 {
-			return validator.errorTagMapper.mapErrorTag(zeroWorkersNumberError)
+func (v *validator) validateWorkersNumber() error {
+	if nil != v.configuration.workersNumber {
+		if *v.configuration.workersNumber == 0 {
+			return v.errorTagMapper.mapErrorTag(zeroWorkersNumberError)
 		}
 	}
 	return nil
 }
 
-func (validator *validator) validateBaseURL() error {
-	if nil != validator.configuration.baseURL && nil != *validator.configuration.baseURL && !(**validator.configuration.baseURL).IsAbs() {
-		return validator.errorTagMapper.mapErrorTag(relativeBaseURLError, (**validator.configuration.baseURL).String())
+func (v *validator) validateBaseURL() error {
+	if nil != v.configuration.baseURL && nil != *v.configuration.baseURL && !(**v.configuration.baseURL).IsAbs() {
+		return v.errorTagMapper.mapErrorTag(relativeBaseURLError, (**v.configuration.baseURL).String())
 	}
 	return nil
 }

@@ -12,12 +12,12 @@ func newURLFuzzer() *urlFuzzer {
 	return new(urlFuzzer)
 }
 
-func (urlFuzzer *urlFuzzer) run() {
-	configuration := urlFuzzer.readConfiguration()
+func (u *urlFuzzer) run() {
+	configuration := u.readConfiguration()
 	fmt.Println(configuration)
 }
 
-func (urlFuzzer *urlFuzzer) readConfiguration() *configuration.Configuration {
+func (u *urlFuzzer) readConfiguration() *configuration.Configuration {
 	configurationFactory := configuration.NewFactory()
 	return configurationFactory.FromCommandLine()
 }

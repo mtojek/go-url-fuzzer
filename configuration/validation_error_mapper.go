@@ -34,8 +34,8 @@ func newValidationErrorMapper() *validationErrorMapper {
 	return &validationErrorMapper{validationErrorMappings}
 }
 
-func (validationErrorMapper *validationErrorMapper) mapErrorTag(tag int, values ...interface{}) error {
-	if errorMessage, exists := validationErrorMapper.validationErrorMappings[tag]; exists {
+func (v *validationErrorMapper) mapErrorTag(tag int, values ...interface{}) error {
+	if errorMessage, exists := v.validationErrorMappings[tag]; exists {
 		return fmt.Errorf(errorMessage, values)
 	}
 	return errors.New(unknownErrorMessage)
