@@ -11,7 +11,7 @@ func TestReadConfiguration(t *testing.T) {
 	assert := assert.New(t)
 
 	// given
-	setCommandLineArgs("fuzzset/fuzz_01.txt", "http://domain.tld/")
+	setCommandLineArgs("input-data/fuzz_01.txt", "http://domain.tld/")
 	sut := newURLFuzzer()
 
 	// when
