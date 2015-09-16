@@ -1,9 +1,8 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/mtojek/go-url-fuzzer/configuration"
+	"github.com/mtojek/go-url-fuzzer/flow"
 )
 
 type urlFuzzer struct{}
@@ -14,7 +13,9 @@ func newURLFuzzer() *urlFuzzer {
 
 func (u *urlFuzzer) run() {
 	configuration := u.readConfiguration()
-	fmt.Println(configuration)
+
+	fuzz := flow.NewFuzz()
+	fuzz.Start(configuration)
 }
 
 func (u *urlFuzzer) readConfiguration() *configuration.Configuration {

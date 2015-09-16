@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/mtojek/go-url-fuzzer/configuration"
+	"github.com/mtojek/go-url-fuzzer/flow/components/abort"
 )
 
 // FileReader is a reader of files.
@@ -19,5 +20,6 @@ func NewFileReader(configuration *configuration.Configuration) *FileReader {
 
 // Pipe read file contents to channel. Piping can be aborted with Ctrl-C.
 func (f *FileReader) Pipe(chan string) {
-
+	notifier := abort.NewNotifier()
+	notifier.Notify()
 }

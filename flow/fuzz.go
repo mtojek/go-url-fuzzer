@@ -1,6 +1,10 @@
 package flow
 
-import "github.com/mtojek/goflow"
+import (
+	"github.com/mtojek/go-url-fuzzer/configuration"
+	"github.com/mtojek/go-url-fuzzer/flow/components/reader"
+	"github.com/mtojek/goflow"
+)
 
 // Fuzz wraps flow.Graph abstraction.
 type Fuzz struct {
@@ -14,6 +18,9 @@ func NewFuzz() *Fuzz {
 }
 
 // Start methods starts the flow.
-func (f *Fuzz) Start() {
+func (f *Fuzz) Start(configuration *configuration.Configuration) {
 	f.graph.InitGraphState()
+
+	fileReader := components.NewFileReader(configuration)
+	fileReader.Pipe(nil) // TODO channel
 }
