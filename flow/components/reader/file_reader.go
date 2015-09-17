@@ -19,16 +19,19 @@ func newFileReader(configuration *configuration.Configuration) *fileReader {
 
 func (f *fileReader) pipe(dataOut chan string, done chan bool) {
 	scanner := bufio.NewScanner(f.inputFile)
+	f.pipeFileContent(scanner, dataOut)
+	f.closeFile()
+	done <- true
+}
+
+func (f *fileReader) pipeFileContent(scanner *bufio.Scanner, dataOut chan string) {
 	for scanner.Scan() {
 		line := scanner.Text()
 		dataOut <- line
 	}
-
-	f.handleClosingFile()
-	done <- true
 }
 
-func (f *fileReader) handleClosingFile() {
+func (f *fileReader) closeFile() {
 	if error := f.inputFile.Close(); nil != error {
 		log.Fatalf("Error occured while closing a file \"%v\": %v", f.inputFile.Name(), error)
 	}
