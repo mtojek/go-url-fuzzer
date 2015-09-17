@@ -32,4 +32,4 @@ cc: #cleancode
 	goimports -w .
 
 dev: install
-	go-url-fuzzer -h "r: 1" -h "br:2" -m "POST" -m "GET" -m "PUT" Makefile http://httbase-url
+	go-url-fuzzer -h "r: 1" -h "br:2" -m "POST" -m "GET" -m "PUT" input-data/fuzz_04.txt http://httbase-url

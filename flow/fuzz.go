@@ -21,6 +21,6 @@ func NewFuzz() *Fuzz {
 func (f *Fuzz) Start(configuration *configuration.Configuration) {
 	f.graph.InitGraphState()
 
-	fileReader := components.NewFileReader(configuration)
-	fileReader.Pipe(nil) // TODO channel
+	abortableFileReader := reader.NewAbortableFileReader(configuration)
+	abortableFileReader.Pipe(nil)
 }

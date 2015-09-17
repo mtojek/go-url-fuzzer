@@ -1,25 +1,35 @@
-package components
+package reader
 
 import (
+	"bufio"
+	"log"
 	"os"
 
 	"github.com/mtojek/go-url-fuzzer/configuration"
-	"github.com/mtojek/go-url-fuzzer/flow/components/abort"
 )
 
-// FileReader is a reader of files.
-type FileReader struct {
-	inputFile os.File
+type fileReader struct {
+	inputFile *os.File
 }
 
-// NewFileReader creates new instance of a file reader.
-func NewFileReader(configuration *configuration.Configuration) *FileReader {
+func newFileReader(configuration *configuration.Configuration) *fileReader {
 	inputFile := configuration.FuzzSetFile()
-	return &FileReader{inputFile: inputFile}
+	return &fileReader{inputFile: inputFile}
 }
 
-// Pipe read file contents to channel. Piping can be aborted with Ctrl-C.
-func (f *FileReader) Pipe(chan string) {
-	notifier := abort.NewNotifier()
-	notifier.Notify()
+func (f *fileReader) pipe(dataOut chan string, done chan bool) {
+	scanner := bufio.NewScanner(f.inputFile)
+	for scanner.Scan() {
+		line := scanner.Text()
+		dataOut <- line
+	}
+
+	f.handleClosingFile()
+	done <- true
+}
+
+func (f *fileReader) handleClosingFile() {
+	if error := f.inputFile.Close(); nil != error {
+		log.Fatalf("Error occured while closing a file \"%v\": %v", f.inputFile.Name(), error)
+	}
 }

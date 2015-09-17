@@ -71,8 +71,8 @@ func (c *Configuration) WorkerWaitPeriod() time.Duration {
 }
 
 // FuzzSetFile returns a file with fuzzed relative URLs.
-func (c *Configuration) FuzzSetFile() os.File {
-	return **c.fuzzSetFile
+func (c *Configuration) FuzzSetFile() *os.File {
+	return *c.fuzzSetFile
 }
 
 // BaseURL returns a base URL of the target website.
