@@ -21,11 +21,11 @@ func NewAbortableFileReader(configuration *configuration.Configuration) *Abortab
 
 // Pipe defines a pipe between a read lines and target output channel. It also supports aborting.
 func (a *AbortableFileReader) Pipe(out chan<- string) {
-	var fileReaderDataIn = make(chan string, fileReaderDataInChannelSize)
-	var fileReaderDone = make(chan bool, 1)
+	var in = make(chan string, fileReaderDataInChannelSize)
+	var done = make(chan bool, 1)
 
-	go a.fileReader.pipe(fileReaderDataIn, fileReaderDone)
-	a.doPiping(fileReaderDataIn, fileReaderDone, out)
+	go a.fileReader.pipe(in, done)
+	a.doPiping(in, done, out)
 }
 
 func (a *AbortableFileReader) doPiping(in <-chan string, done <-chan bool, out chan<- string) {
