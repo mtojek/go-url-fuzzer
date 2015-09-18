@@ -17,17 +17,17 @@ func newFileReader(configuration *configuration.Configuration) *fileReader {
 	return &fileReader{inputFile: inputFile}
 }
 
-func (f *fileReader) pipe(dataOut chan string, done chan bool) {
+func (f *fileReader) pipe(out chan<- string, done chan<- bool) {
 	scanner := bufio.NewScanner(f.inputFile)
-	f.pipeFileContent(scanner, dataOut)
+	f.pipeFileContent(scanner, out)
 	f.closeFile()
 	done <- true
 }
 
-func (f *fileReader) pipeFileContent(scanner *bufio.Scanner, dataOut chan string) {
+func (f *fileReader) pipeFileContent(scanner *bufio.Scanner, out chan<- string) {
 	for scanner.Scan() {
 		line := scanner.Text()
-		dataOut <- line
+		out <- line
 	}
 }
 

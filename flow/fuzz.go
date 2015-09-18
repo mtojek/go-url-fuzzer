@@ -21,6 +21,8 @@ func NewFuzz() *Fuzz {
 func (f *Fuzz) Start(configuration *configuration.Configuration) {
 	f.graph.InitGraphState()
 
+	var ch = make(chan string, (2<<17)+10) // TODO remove
+
 	abortableFileReader := reader.NewAbortableFileReader(configuration)
-	abortableFileReader.Pipe(nil)
+	abortableFileReader.Pipe(ch)
 }
