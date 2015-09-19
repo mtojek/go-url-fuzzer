@@ -23,9 +23,6 @@ func NewFuzz(configuration *configuration.Configuration) *Fuzz {
 	graph := new(flow.Graph)
 	graph.InitGraphState()
 
-	var input = make(chan string, fuzzNetworkInputSize)
-	graph.SetInPort("In", input)
-
 	entryProducer := httpmethod.NewEntryProducer(configuration)
 	entryProducer.Component.Mode = flow.ComponentModePool
 	entryProducer.Component.PoolSize = 8
@@ -35,11 +32,12 @@ func NewFuzz(configuration *configuration.Configuration) *Fuzz {
 	urlChecker.Component.PoolSize = uint8(configuration.WorkersNumber())
 
 	graph.Add(entryProducer, "entryProducer")
-	graph.MapInPort("In", "entryProducer", "RelativeURL")
-	graph.MapOutPort("Out", "entryProducer", "Entry")
-
 	graph.Add(urlChecker, "urlChecker")
-	graph.MapInPort("In", "urlChecker", "Entry")
+	graph.Connect("entryProducer", "Entry", "urlChecker", "Entry")
+	graph.MapInPort("In", "entryProducer", "RelativeURL")
+
+	var input = make(chan string, fuzzNetworkInputSize)
+	graph.SetInPort("In", input)
 
 	return &Fuzz{graph: graph, input: input, configuration: configuration}
 }
