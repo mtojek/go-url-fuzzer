@@ -14,8 +14,8 @@ func newURLFuzzer() *urlFuzzer {
 func (u *urlFuzzer) run() {
 	configuration := u.readConfiguration()
 
-	fuzz := flow.NewFuzz()
-	fuzz.Start(configuration)
+	fuzz := flow.NewFuzz(configuration)
+	fuzz.Start()
 }
 
 func (u *urlFuzzer) readConfiguration() *configuration.Configuration {
