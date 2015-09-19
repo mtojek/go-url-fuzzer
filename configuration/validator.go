@@ -60,8 +60,12 @@ func (v *validator) validateMethods() error {
 
 func (v *validator) validateWorkersNumber() error {
 	if nil != v.configuration.workersNumber {
-		if *v.configuration.workersNumber == 0 {
+		workersNumber := *v.configuration.workersNumber
+
+		if workersNumber == 0 {
 			return v.errorTagMapper.mapErrorTag(zeroWorkersNumberError)
+		} else if workersNumber >= (2 << 8) {
+			return v.errorTagMapper.mapErrorTag(tooManyWorkersError)
 		}
 	}
 	return nil

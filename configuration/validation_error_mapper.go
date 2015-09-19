@@ -10,6 +10,7 @@ const (
 	repeatedHTTPMethodError
 	relativeBaseURLError
 	zeroWorkersNumberError
+	tooManyWorkersError
 )
 
 const (
@@ -17,6 +18,7 @@ const (
 	repeatedHTTPMethodErrorMessage = "HTTP methods must not repeat themselves, repeated: \"%v\"."
 	relativeBaseURLErrorMessage    = "The base URL must be absolute, given: \"%v\"."
 	zeroWorkersNumberErrorMessage  = "There must be at least one worker."
+	tooManyWorkersErrorMessage     = "Too many workers defined (upto 255)."
 	unknownErrorMessage            = "Unknown error occurred."
 )
 
@@ -30,6 +32,7 @@ func newValidationErrorMapper() *validationErrorMapper {
 		repeatedHTTPMethodError: repeatedHTTPMethodErrorMessage,
 		relativeBaseURLError:    relativeBaseURLErrorMessage,
 		zeroWorkersNumberError:  zeroWorkersNumberErrorMessage,
+		tooManyWorkersError:     tooManyWorkersErrorMessage,
 	}
 	return &validationErrorMapper{validationErrorMappings}
 }

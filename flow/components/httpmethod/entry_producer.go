@@ -1,8 +1,6 @@
 package httpmethod
 
 import (
-	"log"
-
 	"github.com/trustmaster/goflow"
 )
 
@@ -11,7 +9,7 @@ type EntryProducer struct {
 	flow.Component
 
 	RelativeURL <-chan string
-	//Entry       chan<- Entry
+	Entry       chan<- Entry
 
 	methods []string
 }
@@ -26,7 +24,6 @@ func NewEntryProducer(configuration entryProducerConfiguration) *EntryProducer {
 func (e *EntryProducer) OnRelativeURL(relativeURL string) {
 	for _, httpMethod := range e.methods {
 		entry := newEntry(relativeURL, httpMethod)
-		//e.Entry <- entry
-		log.Println(entry)
+		e.Entry <- entry
 	}
 }

@@ -3,6 +3,7 @@ package flow
 import (
 	"github.com/mtojek/go-url-fuzzer/configuration"
 	"github.com/mtojek/go-url-fuzzer/flow/components/httpmethod"
+	"github.com/mtojek/go-url-fuzzer/flow/components/httprequest"
 	"github.com/mtojek/go-url-fuzzer/flow/components/reader"
 	"github.com/trustmaster/goflow"
 )
@@ -22,15 +23,23 @@ func NewFuzz(configuration *configuration.Configuration) *Fuzz {
 	graph := new(flow.Graph)
 	graph.InitGraphState()
 
+	var input = make(chan string, fuzzNetworkInputSize)
+	graph.SetInPort("In", input)
+
 	entryProducer := httpmethod.NewEntryProducer(configuration)
 	entryProducer.Component.Mode = flow.ComponentModePool
 	entryProducer.Component.PoolSize = 8
 
+	urlChecker := httprequest.NewURLChecker(configuration)
+	urlChecker.Component.Mode = flow.ComponentModePool
+	urlChecker.Component.PoolSize = uint8(configuration.WorkersNumber())
+
 	graph.Add(entryProducer, "entryProducer")
 	graph.MapInPort("In", "entryProducer", "RelativeURL")
+	graph.MapOutPort("Out", "entryProducer", "Entry")
 
-	var input = make(chan string, fuzzNetworkInputSize)
-	graph.SetInPort("In", input)
+	graph.Add(urlChecker, "urlChecker")
+	graph.MapInPort("In", "urlChecker", "Entry")
 
 	return &Fuzz{graph: graph, input: input, configuration: configuration}
 }
