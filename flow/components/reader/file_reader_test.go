@@ -1,16 +1,14 @@
 package reader
 
 import (
-	"testing"
-
 	"os"
-
 	"path/filepath"
+	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNewInstanceHavingInputFile(t *testing.T) {
+func TestNewInstanceHasInputFile(t *testing.T) {
 	assert := assert.New(t)
 
 	// given
@@ -34,18 +32,19 @@ func TestPipe(t *testing.T) {
 	c := newFileReaderMockedConfiguration(file)
 	sut := newFileReader(c)
 
-	var in = make(chan string, 3) // number of lines in fuzz file
+	var out = make(chan string, 3) // number of lines in fuzz file
 	var done = make(chan bool, 1)
 
 	// when
-	sut.pipe(in, done)
+	sut.pipe(out, done)
 
 	// then
 	assert.True(<-done, "Reading file should be finished.")
-	assert.Equal("001", <-in, "Invalid line read from file.")
-	assert.Equal("002", <-in, "Invalid line read from file.")
-	assert.Equal("003", <-in, "Invalid line read from file.")
-	assert.Len(in, 0, "Read buffer should empty now.")
+	assert.Equal("001", <-out, "Invalid line read from file.")
+	assert.Equal("002", <-out, "Invalid line read from file.")
+	assert.Equal("003", <-out, "Invalid line read from file.")
+	assert.Len(out, 0, "Out buffer should be empty now.")
+	close(out)
 
 	assert.Equal(^(uintptr(0)), file.Fd(), "File descriptor should be closed now.")
 }

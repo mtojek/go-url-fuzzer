@@ -23,24 +23,36 @@ func (a *AbortableFileReader) Pipe(out chan<- string) {
 	var done = make(chan bool, 1)
 
 	go a.fileReader.pipe(in, done)
-	a.doPiping(in, done, out)
+	a.doPiping(in, out, done)
 }
 
-func (a *AbortableFileReader) doPiping(in <-chan string, done <-chan bool, out chan<- string) {
+func (a *AbortableFileReader) doPiping(in <-chan string, out chan<- string, done <-chan bool) {
 	abort := newAbort().signal()
+
+	willBeClosed := false
+	closing := false
+
+	log.Println("Reading fuzz set file started.")
 
 	for {
 		select {
 		case <-abort:
 			log.Println("Reading fuzz set file aborted.")
-			close(out)
-			return
-		case <-done:
-			log.Println("Reading fuzz set file done.")
-			close(out)
-			return
+			closing = true
 		case line := <-in:
 			out <- line
+		case <-done:
+			willBeClosed = true
+		}
+
+		if willBeClosed && len(in) == 0 {
+			log.Println("Reading fuzz set file done.")
+			closing = true
+		}
+
+		if closing {
+			close(out)
+			return
 		}
 	}
 }
