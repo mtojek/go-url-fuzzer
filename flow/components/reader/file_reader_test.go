@@ -67,7 +67,7 @@ func TestCloseFile(t *testing.T) {
 }
 
 func openFuzzSetFile(fileName string) (*os.File, error) {
-	fuzzSetFile := filepath.Join("../../../input-data/", fileName)
+	fuzzSetFile := filepath.Join("../../../resources/input-data/", fileName)
 	absoluteFilePath, _ := filepath.Abs(fuzzSetFile)
 
 	file, error := os.OpenFile(absoluteFilePath, os.O_RDONLY, 0666)

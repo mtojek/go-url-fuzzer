@@ -17,7 +17,7 @@ func TestReadConfiguration(t *testing.T) {
 	server := localserver.NewLocalServer(hostPort, scheme)
 	server.Start()
 
-	setCommandLineArgs("input-data/fuzz_01.txt", scheme+"://"+hostPort)
+	setCommandLineArgs("resources/input-data/fuzz_01.txt", scheme+"://"+hostPort)
 	sut := newURLFuzzer()
 
 	// when
