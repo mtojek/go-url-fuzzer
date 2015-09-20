@@ -65,6 +65,26 @@ func TestZeroWorkersNumber(t *testing.T) {
 	assert.Equal(error.Error(), fmt.Sprintf("%v", zeroWorkersNumberError), "zeroWorkersNumberError should be returned.")
 }
 
+func TestTooManyWorkersNumber(t *testing.T) {
+	assert := assert.New(t)
+
+	// given
+	configuration := newConfiguration()
+	configuration.headers = &map[string]string{"a_header": "a_value"}
+	configuration.methods = &[]string{"PUT", "POST", "OPTIONS"}
+	var thousand uint64 = 1000
+	configuration.workersNumber = &thousand
+	sut := newValidator(configuration)
+	sut.errorTagMapper = newMockedErrorTagMapper()
+
+	// when
+	error := sut.validate(nil)
+
+	// then
+	assert.NotNil(error, "There should be error returned.")
+	assert.Equal(error.Error(), fmt.Sprintf("%v", tooManyWorkersError), "tooManyWorkersError should be returned.")
+}
+
 func TestRelativeBaseUrl(t *testing.T) {
 	assert := assert.New(t)
 
