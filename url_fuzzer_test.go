@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/mtojek/go-url-fuzzer/testutil/localserver"
+	"github.com/mtojek/go-url-fuzzer/testutils/localserver"
 	"github.com/stretchr/testify/assert"
 )
 
