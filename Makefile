@@ -12,6 +12,7 @@ go-get:
 	go get github.com/trustmaster/goflow
 	go get gopkg.in/alecthomas/kingpin.v2
 	go get github.com/stretchr/testify
+	go get github.com/etix/stoppableListener
 
 install:
 	go get -t -v ./...
@@ -32,4 +33,4 @@ cc: #cleancode
 	goimports -w .
 
 dev: install
-	go-url-fuzzer -h "r: 1" -h "br:2" -m "POST" -m "GET" -m "PUT" input-data/fuzz_02.txt http://httbase-url
+	go-url-fuzzer -h "r: 1" -h "br:2" -m "POST" -m "GET" -m "PUT" input-data/fuzz_02.txt http://nowy.tlen.pl/api/

@@ -1,6 +1,12 @@
 package configuration
 
-import "gopkg.in/alecthomas/kingpin.v2"
+import (
+	"crypto/tls"
+	"net/http"
+	"time"
+
+	"gopkg.in/alecthomas/kingpin.v2"
+)
 
 type validator struct {
 	configuration  *Configuration
@@ -13,25 +19,44 @@ func newValidator(configuration *Configuration) *validator {
 }
 
 func (v *validator) validate(*kingpin.Application) error {
-	var error error
-
-	if error = v.validateHeaders(); nil != error {
+	if error := v.validateOffline(); nil != error {
 		return error
 	}
 
-	if error = v.validateMethods(); nil != error {
-		return error
-	}
-
-	if error = v.validateWorkersNumber(); nil != error {
-		return error
-	}
-
-	if error = v.validateBaseURL(); nil != error {
+	if error := v.validateOnline(); nil != error {
 		return error
 	}
 
 	return nil
+}
+
+func (v *validator) validateOffline() error {
+	if error := v.validateHeaders(); nil != error {
+		return error
+	}
+
+	if error := v.validateMethods(); nil != error {
+		return error
+	}
+
+	if error := v.validateWorkersNumber(); nil != error {
+		return error
+	}
+
+	if error := v.validateBaseURL(); nil != error {
+		return error
+	}
+
+	return nil
+}
+
+func (v *validator) validateOnline() error {
+	if error := v.validateHost(); nil != error {
+		return error
+	}
+
+	return nil
+
 }
 
 func (v *validator) validateHeaders() error {
@@ -75,5 +100,25 @@ func (v *validator) validateBaseURL() error {
 	if nil != v.configuration.baseURL && nil != *v.configuration.baseURL && !(**v.configuration.baseURL).IsAbs() {
 		return v.errorTagMapper.mapErrorTag(relativeBaseURLError, (**v.configuration.baseURL).String())
 	}
+	return nil
+}
+
+func (v *validator) validateHost() error {
+	baseURL := *v.configuration.baseURL
+	host := baseURL.Host
+	scheme := baseURL.Scheme
+
+	timeout := time.Duration(v.configuration.URLResponseTimeout())
+	tr := &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}}
+	client := http.Client{
+		Timeout:   timeout,
+		Transport: tr,
+	}
+
+	_, error := client.Get(scheme + "://" + host)
+	if nil != error {
+		return v.errorTagMapper.mapErrorTag(unableToConnectToHostBaseURLError, host, error)
+	}
+
 	return nil
 }

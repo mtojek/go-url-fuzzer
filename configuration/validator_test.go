@@ -20,7 +20,7 @@ func TestInvalidHeaders(t *testing.T) {
 	sut.errorTagMapper = newMockedErrorTagMapper()
 
 	// when
-	error := sut.validate(nil)
+	error := sut.validateOffline()
 
 	// then
 	assert.NotNil(error, "There should be error returned.")
@@ -38,7 +38,7 @@ func TestRepeatedMethods(t *testing.T) {
 	sut.errorTagMapper = newMockedErrorTagMapper()
 
 	// when
-	error := sut.validate(nil)
+	error := sut.validateOffline()
 
 	// then
 	assert.NotNil(error, "There should be error returned.")
@@ -58,7 +58,7 @@ func TestZeroWorkersNumber(t *testing.T) {
 	sut.errorTagMapper = newMockedErrorTagMapper()
 
 	// when
-	error := sut.validate(nil)
+	error := sut.validateOffline()
 
 	// then
 	assert.NotNil(error, "There should be error returned.")
@@ -78,7 +78,7 @@ func TestTooManyWorkersNumber(t *testing.T) {
 	sut.errorTagMapper = newMockedErrorTagMapper()
 
 	// when
-	error := sut.validate(nil)
+	error := sut.validateOffline()
 
 	// then
 	assert.NotNil(error, "There should be error returned.")
@@ -100,7 +100,7 @@ func TestRelativeBaseUrl(t *testing.T) {
 	sut.errorTagMapper = newMockedErrorTagMapper()
 
 	// when
-	error := sut.validate(nil)
+	error := sut.validateOffline()
 
 	// then
 	assert.NotNil(error, "There should be error returned.")
@@ -122,7 +122,7 @@ func TestValidConfiguration(t *testing.T) {
 	sut.errorTagMapper = newMockedErrorTagMapper()
 
 	// when
-	error := sut.validate(nil)
+	error := sut.validateOffline()
 
 	// then
 	assert.Nil(error, "There should not be error returned.")
