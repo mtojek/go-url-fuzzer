@@ -1,13 +1,11 @@
 package main
 
 import (
-	"os"
-	"testing"
-
+	"log"
 	"net"
 	"net/http"
-
-	"log"
+	"os"
+	"testing"
 	"time"
 
 	"github.com/etix/stoppableListener"
