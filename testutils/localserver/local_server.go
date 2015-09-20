@@ -6,7 +6,14 @@ import (
 	"net/http"
 	"time"
 
+	"crypto/tls"
+
 	"github.com/etix/stoppableListener"
+)
+
+const (
+	defaultCaPem = "ca.pem"
+	defaultCaKey = "ca.key"
 )
 
 // LocalServer provides a simple, local HTTP server.
@@ -14,17 +21,51 @@ type LocalServer struct {
 	hostPort string
 	scheme   string
 	listener *stoppableListener.StoppableListener
+
+	tlsConfigProvider *tlsConfigProvider
 }
 
 // NewLocalServer creates new instance of a HTTP server. It requires host, port and protocol scheme.
 func NewLocalServer(hostPort string, scheme string) *LocalServer {
-	return &LocalServer{hostPort: hostPort, scheme: scheme}
+	tlsConfigProvider := newTLSConfigProvider()
+	return &LocalServer{hostPort: hostPort, scheme: scheme, tlsConfigProvider: tlsConfigProvider}
 }
 
-// Start runs the server.
+// Start runs the server basing on chosen protocol scheme.
 func (l *LocalServer) Start() {
-	listener, _ := net.Listen("tcp", l.hostPort)
+	if l.scheme == "http" {
+		l.StartHTTP()
+	} else if l.scheme == "https" {
+		l.StartTLS(defaultCaPem, defaultCaKey)
+	} else {
+		log.Fatalf("Unknown scheme specified: %v\n", l.scheme)
+	}
+}
+
+// StartHTTP runs the HTTP server.
+func (l *LocalServer) StartHTTP() {
+	listener, error := net.Listen("tcp", l.hostPort)
+	if nil != error {
+		log.Fatalln(error)
+	}
+
 	l.listener = stoppableListener.Handle(listener)
+	l.startServing()
+}
+
+// StartTLS runs the TLS server.
+func (l *LocalServer) StartTLS(caPemPath, caKeyPath string) {
+	config := l.tlsConfigProvider.Provide(caPemPath, caKeyPath)
+	listener, error := tls.Listen("tcp", l.hostPort, config)
+	if nil != error {
+		log.Fatalln(error)
+	}
+
+	l.listener = stoppableListener.Handle(listener)
+	l.startServing()
+}
+
+func (l *LocalServer) startServing() {
 	go http.Serve(l.listener, nil)
 	l.waitUntilReady()
 }
@@ -33,14 +74,15 @@ func (l *LocalServer) waitUntilReady() {
 	var ready bool
 
 	for !ready {
-		_, error := http.Get(l.scheme + "://" + l.hostPort)
-		ready = (nil == error)
-
-		log.Printf("Waiting for local server to start: %v, error: %v\n", l.hostPort, error)
-		time.Sleep(10 * time.Millisecond)
+		if _, error := http.Get(l.scheme + "://" + l.hostPort); nil != error {
+			log.Printf("Waiting for local server to start: %v, error: %v\n", l.hostPort, error)
+			time.Sleep(10 * time.Millisecond)
+		} else {
+			ready = true
+		}
 	}
 
-	log.Println("Local server started.")
+	log.Printf("Local server started: %v\n", l.hostPort)
 }
 
 // Stop method stops the running server.

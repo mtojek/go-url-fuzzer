@@ -7,6 +7,9 @@ import (
 
 	"net/url"
 
+	"time"
+
+	"github.com/mtojek/go-url-fuzzer/testutils/localserver"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -107,7 +110,7 @@ func TestRelativeBaseUrl(t *testing.T) {
 	assert.Equal(error.Error(), fmt.Sprintf("%v", relativeBaseURLError), "relativeBaseUrlError should be returned.")
 }
 
-func TestValidConfiguration(t *testing.T) {
+func TestValidOfflineConfiguration(t *testing.T) {
 	assert := assert.New(t)
 
 	// given
@@ -123,6 +126,80 @@ func TestValidConfiguration(t *testing.T) {
 
 	// when
 	error := sut.validateOffline()
+
+	// then
+	assert.Nil(error, "There should not be error returned.")
+}
+
+func TestInvalidHostBaseUrl(t *testing.T) {
+	assert := assert.New(t)
+
+	// given
+	configuration := newConfiguration()
+	configuration.headers = &map[string]string{"a_header": "a_value"}
+	configuration.methods = &[]string{"PUT", "POST", "OPTIONS"}
+	var one uint64 = 1
+	configuration.workersNumber = &one
+	invalidURL, _ := url.Parse("http://invalid-domain.tld/")
+	configuration.baseURL = &invalidURL
+	var responseTimeout = 1 * time.Second
+	configuration.urlResponseTimeout = &responseTimeout
+	sut := newValidator(configuration)
+	sut.errorTagMapper = newMockedErrorTagMapper()
+
+	// when
+	error := sut.validateOnline()
+
+	// then
+	assert.NotNil(error, "There should be error returned.")
+	assert.Equal(error.Error(), fmt.Sprintf("%v", unableToConnectToHostBaseURLError), "unableToConnectToHostBaseURLError should be returned.")
+}
+
+func TestMissingSchemeBaseUrl(t *testing.T) {
+	assert := assert.New(t)
+
+	// given
+	configuration := newConfiguration()
+	configuration.headers = &map[string]string{"a_header": "a_value"}
+	configuration.methods = &[]string{"PUT", "POST", "OPTIONS"}
+	var one uint64 = 1
+	configuration.workersNumber = &one
+	invalidURL, _ := url.Parse("invalid-domain.tld/test-dir/")
+	configuration.baseURL = &invalidURL
+	var responseTimeout = 1 * time.Second
+	configuration.urlResponseTimeout = &responseTimeout
+	sut := newValidator(configuration)
+	sut.errorTagMapper = newMockedErrorTagMapper()
+
+	// when
+	error := sut.validateOnline()
+
+	// then
+	assert.NotNil(error, "There should be error returned.")
+	assert.Equal(error.Error(), fmt.Sprintf("%v", unableToConnectToHostBaseURLError), "unableToConnectToHostBaseURLError should be returned.")
+}
+
+func TestValidHttpHostBaseUrl(t *testing.T) {
+	assert := assert.New(t)
+
+	// given
+	hostPort := "127.0.0.1:10601"
+	scheme := "http"
+	server := localserver.NewLocalServer(hostPort, scheme)
+
+	configuration := newConfiguration()
+	invalidURL, _ := url.Parse(scheme + "://" + hostPort)
+	configuration.baseURL = &invalidURL
+	var responseTimeout = 1 * time.Second
+	configuration.urlResponseTimeout = &responseTimeout
+	sut := newValidator(configuration)
+	sut.errorTagMapper = newMockedErrorTagMapper()
+
+	server.Start()
+
+	// when
+	error := sut.validateOnline()
+	server.Stop()
 
 	// then
 	assert.Nil(error, "There should not be error returned.")
