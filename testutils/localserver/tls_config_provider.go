@@ -3,8 +3,6 @@ package localserver
 import (
 	"crypto/rand"
 	"crypto/tls"
-	"crypto/x509"
-	"io/ioutil"
 	"log"
 )
 
@@ -16,30 +14,14 @@ func newTLSConfigProvider() *tlsConfigProvider {
 }
 
 func (t *tlsConfigProvider) Provide(caPemPath, caKeyPath string) *tls.Config {
-	caPem, _ := ioutil.ReadFile("ca.pem")
-	ca, error := x509.ParseCertificate(caPem)
+	cert, error := tls.LoadX509KeyPair(caPemPath, caKeyPath)
 	if nil != error {
-		log.Fatalln(error)
-	}
-
-	caKey, _ := ioutil.ReadFile("ca.key")
-	priv, error := x509.ParsePKCS1PrivateKey(caKey)
-	if nil != error {
-		log.Fatalln(error)
-	}
-
-	pool := x509.NewCertPool()
-	pool.AddCert(ca)
-
-	cert := tls.Certificate{
-		Certificate: [][]byte{caPem},
-		PrivateKey:  priv,
+		log.Fatalln("tls.LoadX509KeyPair(caPemPath, caKeyPath): ", error)
 	}
 
 	config := &tls.Config{
-		ClientAuth:   tls.RequireAndVerifyClientCert,
+		ClientAuth:   tls.NoClientCert,
 		Certificates: []tls.Certificate{cert},
-		ClientCAs:    pool,
 	}
 	config.Rand = rand.Reader
 	return config

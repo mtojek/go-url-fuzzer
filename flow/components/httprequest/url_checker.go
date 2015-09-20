@@ -24,5 +24,4 @@ func (u *URLChecker) OnEntry(entry httpmethod.Entry) {
 	log.Println(entry)
 }
 
-// TODO Detect not existing domain
 // TODO find common 404 z uwzglednieniem headerow i method

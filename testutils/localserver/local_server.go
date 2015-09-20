@@ -12,8 +12,8 @@ import (
 )
 
 const (
-	defaultCaPem = "ca.pem"
-	defaultCaKey = "ca.key"
+	defaultCaKey = "server_ca.key"
+	defaultCaPem = "server_ca.pem"
 )
 
 // LocalServer provides a simple, local HTTP server.
@@ -36,7 +36,7 @@ func (l *LocalServer) Start() {
 	if l.scheme == "http" {
 		l.StartHTTP()
 	} else if l.scheme == "https" {
-		l.StartTLS(defaultCaPem, defaultCaKey)
+		l.StartTLS(defaultCaKey, defaultCaPem)
 	} else {
 		log.Fatalf("Unknown scheme specified: %v\n", l.scheme)
 	}
@@ -73,8 +73,13 @@ func (l *LocalServer) startServing() {
 func (l *LocalServer) waitUntilReady() {
 	var ready bool
 
+	tr := &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}}
+	client := http.Client{
+		Transport: tr,
+	}
+
 	for !ready {
-		if _, error := http.Get(l.scheme + "://" + l.hostPort); nil != error {
+		if _, error := client.Get(l.scheme + "://" + l.hostPort); nil != error {
 			log.Printf("Waiting for local server to start: %v, error: %v\n", l.hostPort, error)
 			time.Sleep(10 * time.Millisecond)
 		} else {
@@ -88,4 +93,5 @@ func (l *LocalServer) waitUntilReady() {
 // Stop method stops the running server.
 func (l *LocalServer) Stop() {
 	l.listener.Stop <- true
+	log.Printf("Local server stopped: %v\n", l.hostPort)
 }

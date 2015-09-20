@@ -1,12 +1,9 @@
 package configuration
 
 import (
-	"testing"
-
 	"fmt"
-
 	"net/url"
-
+	"testing"
 	"time"
 
 	"github.com/mtojek/go-url-fuzzer/testutils/localserver"
@@ -199,6 +196,33 @@ func TestValidHttpHostBaseUrl(t *testing.T) {
 
 	// when
 	error := sut.validateOnline()
+	server.Stop()
+
+	// then
+	assert.Nil(error, "There should not be error returned.")
+}
+
+func TestValidHttpsHostBaseUrl(t *testing.T) {
+	assert := assert.New(t)
+
+	// given
+	hostPort := "localhost:10602"
+	scheme := "https"
+	server := localserver.NewLocalServer(hostPort, scheme)
+
+	configuration := newConfiguration()
+	invalidURL, _ := url.Parse(scheme + "://" + hostPort)
+	configuration.baseURL = &invalidURL
+	var responseTimeout = 1 * time.Second
+	configuration.urlResponseTimeout = &responseTimeout
+	sut := newValidator(configuration)
+	sut.errorTagMapper = newMockedErrorTagMapper()
+
+	server.StartTLS("../resources/certs/server_ca.pem", "../resources/certs/server_ca.key")
+
+	// when
+	error := sut.validateOnline()
+
 	server.Stop()
 
 	// then
