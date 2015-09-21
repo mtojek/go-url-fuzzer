@@ -12,7 +12,7 @@ go-get:
 	go get github.com/trustmaster/goflow
 	go get gopkg.in/alecthomas/kingpin.v2
 	go get github.com/stretchr/testify
-	go get github.com/etix/stoppableListener
+	go get github.com/mtojek/localserver
 
 install:
 	go get -t -v ./...

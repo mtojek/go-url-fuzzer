@@ -24,4 +24,5 @@ func (u *URLChecker) OnEntry(entry httpmethod.Entry) {
 	log.Println(entry)
 }
 
-// TODO find common 404 z uwzglednieniem headerow i method
+// TODO inne port
+// TODO zdefiniuj bledna strone z parametru, default 404
