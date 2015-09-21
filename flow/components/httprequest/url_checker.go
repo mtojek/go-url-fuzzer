@@ -23,5 +23,3 @@ func NewURLChecker(configuration urlCheckerConfiguration) *URLChecker {
 func (u *URLChecker) OnEntry(entry httpmethod.Entry) {
 	log.Println(entry)
 }
-
-// TODO zdefiniuj bledna strone z parametru, default 404
