@@ -12,6 +12,7 @@ const (
 	unableToConnectToHostBaseURLError
 	zeroWorkersNumberError
 	tooManyWorkersError
+	invalidHTTPErrorCodeError
 )
 
 const (
@@ -21,6 +22,7 @@ const (
 	unableToConnectToHostBaseURLErrorMessage = "Unable to connect to the host: \"%v\", error: %v"
 	zeroWorkersNumberErrorMessage            = "There must be at least one worker"
 	tooManyWorkersErrorMessage               = "Too many workers defined (upto 255)"
+	invalidHTTPErrorCodeErrorMessage         = "Invalid HTTP error code given: \"%v\""
 	unknownErrorMessage                      = "Unknown error occurred"
 )
 
@@ -36,6 +38,7 @@ func newValidationErrorMapper() *validationErrorMapper {
 		unableToConnectToHostBaseURLError: unableToConnectToHostBaseURLErrorMessage,
 		zeroWorkersNumberError:            zeroWorkersNumberErrorMessage,
 		tooManyWorkersError:               tooManyWorkersErrorMessage,
+		invalidHTTPErrorCodeError:         invalidHTTPErrorCodeErrorMessage,
 	}
 	return &validationErrorMapper{validationErrorMappings}
 }

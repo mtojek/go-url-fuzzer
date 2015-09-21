@@ -13,6 +13,7 @@ type Configuration struct {
 	outputFile         *string
 	reportDirectory    *string
 	urlResponseTimeout *time.Duration
+	httpErrorCode      *uint64
 	workersNumber      *uint64
 	workerWaitPeriod   *time.Duration
 	fuzzSetFile        **os.File
@@ -58,6 +59,11 @@ func (c *Configuration) ReportDirectory() (result string, exists bool) {
 // URLResponseTimeout method returns fuzzed URL response timeout.
 func (c *Configuration) URLResponseTimeout() time.Duration {
 	return *c.urlResponseTimeout
+}
+
+// HTTPErrorCode method returns a defined HTTP status error code, e.g. 404
+func (c *Configuration) HTTPErrorCode() uint64 {
+	return *c.httpErrorCode
 }
 
 // WorkersNumber returns a number of active fuzzing workers.

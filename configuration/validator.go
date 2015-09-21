@@ -43,6 +43,10 @@ func (v *validator) validateOffline() error {
 		return error
 	}
 
+	if error := v.validateHTTPErrorCode(); nil != error {
+		return error
+	}
+
 	if error := v.validateBaseURL(); nil != error {
 		return error
 	}
@@ -91,6 +95,17 @@ func (v *validator) validateWorkersNumber() error {
 			return v.errorTagMapper.mapErrorTag(zeroWorkersNumberError)
 		} else if workersNumber >= (2 << 8) {
 			return v.errorTagMapper.mapErrorTag(tooManyWorkersError)
+		}
+	}
+	return nil
+}
+
+func (v *validator) validateHTTPErrorCode() error {
+	if nil != v.configuration.httpErrorCode {
+		httpErrorCode := *v.configuration.httpErrorCode
+
+		if httpErrorCode < 100 || httpErrorCode > 599 {
+			return v.errorTagMapper.mapErrorTag(invalidHTTPErrorCodeError, httpErrorCode)
 		}
 	}
 	return nil

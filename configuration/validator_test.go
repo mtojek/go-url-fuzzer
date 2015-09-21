@@ -85,6 +85,50 @@ func TestTooManyWorkersNumber(t *testing.T) {
 	assert.Equal(error.Error(), fmt.Sprintf("%v", tooManyWorkersError), "tooManyWorkersError should be returned.")
 }
 
+func TestInvalidHTTPErrorCodeBeforeRange(t *testing.T) {
+	assert := assert.New(t)
+
+	// given
+	configuration := newConfiguration()
+	configuration.headers = &map[string]string{"a_header": "a_value"}
+	configuration.methods = &[]string{"PUT", "POST", "OPTIONS"}
+	var thousand uint64 = 1
+	configuration.workersNumber = &thousand
+	var httpErrorCode uint64 = 99
+	configuration.httpErrorCode = &httpErrorCode
+	sut := newValidator(configuration)
+	sut.errorTagMapper = newMockedErrorTagMapper()
+
+	// when
+	error := sut.validateOffline()
+
+	// then
+	assert.NotNil(error, "There should be error returned.")
+	assert.Equal(error.Error(), fmt.Sprintf("%v", invalidHTTPErrorCodeError), "invalidHTTPErrorCodeError should be returned.")
+}
+
+func TestInvalidHTTPErrorCodeAfterRange(t *testing.T) {
+	assert := assert.New(t)
+
+	// given
+	configuration := newConfiguration()
+	configuration.headers = &map[string]string{"a_header": "a_value"}
+	configuration.methods = &[]string{"PUT", "POST", "OPTIONS"}
+	var thousand uint64 = 1
+	configuration.workersNumber = &thousand
+	var httpErrorCode uint64 = 600
+	configuration.httpErrorCode = &httpErrorCode
+	sut := newValidator(configuration)
+	sut.errorTagMapper = newMockedErrorTagMapper()
+
+	// when
+	error := sut.validateOffline()
+
+	// then
+	assert.NotNil(error, "There should be error returned.")
+	assert.Equal(error.Error(), fmt.Sprintf("%v", invalidHTTPErrorCodeError), "invalidHTTPErrorCodeError should be returned.")
+}
+
 func TestRelativeBaseUrl(t *testing.T) {
 	assert := assert.New(t)
 

@@ -34,6 +34,8 @@ Flags:
   -r, --report=report_directory
                     Target output directory of an url fuzzing HTML report
   -t, --timeout=5s  Fuzzed url response timeout
+  -e, --http-error-code=404
+                    HTTP error code
   -n, --workers-number=5
                     Number of workers
   -w, --wait-period=0s

@@ -23,6 +23,7 @@ func TestCreateFlagsBoundConfiguration(t *testing.T) {
 	assert.NotNil(result.reportDirectory, "Report directory should not be nil")
 	assert.NotNil(result.urlResponseTimeout, "Response timeout should not be nil")
 	assert.NotNil(result.workersNumber, "Workers number should not be nil")
+	assert.NotNil(result.httpErrorCode, "HTTP error code should not be nil")
 	assert.NotNil(result.workerWaitPeriod, "Worker wait period should not be nil")
 	assert.NotNil(result.fuzzSetFile, "Fuzz set file should not be nil")
 	assert.NotNil(result.baseURL, "Base URL should not be nil")
