@@ -49,7 +49,7 @@ Args:
 
 Example:
 ~~~
-  go-url-fuzzer -h "User-Agent: curl" -h "Cookie: token=1" -m "GET" -m "POST" -r target fuzz_entries.txt http://domain.tld/base/
+go-url-fuzzer -h "User-Agent: curl" -h "Cookie: token=1" -m "GET" -m "POST" -r target resources/input-data/fuzz_03.txt http://example.com/
 ~~~
 
 ## License
