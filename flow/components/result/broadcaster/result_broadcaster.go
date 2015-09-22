@@ -21,6 +21,6 @@ func NewResultBroadcaster(configuration *configuration.Configuration) *ResultBro
 }
 
 // OnFoundEntry performs broadcasting.
-func (u *ResultBroadcaster) OnFoundEntry(entry messages.Entry) {
+func (r *ResultBroadcaster) OnFoundEntry(entry messages.Entry) {
 	log.Println(entry)
 }

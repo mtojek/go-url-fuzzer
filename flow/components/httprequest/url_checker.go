@@ -1,8 +1,6 @@
 package httprequest
 
 import (
-	"log"
-
 	"github.com/mtojek/go-url-fuzzer/configuration"
 	"github.com/mtojek/go-url-fuzzer/flow/messages"
 	"github.com/trustmaster/goflow"
@@ -12,7 +10,8 @@ import (
 type URLChecker struct {
 	flow.Component
 
-	Entry <-chan messages.Entry
+	Entry      <-chan messages.Entry
+	FoundEntry chan<- messages.Entry
 }
 
 // NewURLChecker creates new instance of URL checker.
@@ -22,5 +21,5 @@ func NewURLChecker(configuration *configuration.Configuration) *URLChecker {
 
 // OnEntry perfoms the main URL check.
 func (u *URLChecker) OnEntry(entry messages.Entry) {
-	log.Println(entry)
+	u.FoundEntry <- entry
 }
