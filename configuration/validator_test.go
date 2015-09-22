@@ -14,8 +14,8 @@ func TestInvalidHeaders(t *testing.T) {
 	assert := assert.New(t)
 
 	// given
-	configuration := newConfiguration()
-	configuration.headers = &map[string]string{"a_header": ""}
+	builder := NewBuilder()
+	configuration := builder.Headers(map[string]string{"a_header": ""}).Build()
 	sut := newValidator(configuration)
 	sut.errorTagMapper = newMockedErrorTagMapper()
 
@@ -31,9 +31,12 @@ func TestRepeatedMethods(t *testing.T) {
 	assert := assert.New(t)
 
 	// given
-	configuration := newConfiguration()
-	configuration.headers = &map[string]string{"a_header": "a_value"}
-	configuration.methods = &[]string{"PUT", "POST", "PUT", "OPTIONS"}
+	builder := NewBuilder()
+	configuration := builder.
+		Headers(map[string]string{"a_header": "a_value"}).
+		Methods([]string{"PUT", "POST", "PUT", "OPTIONS"}).
+		Build()
+
 	sut := newValidator(configuration)
 	sut.errorTagMapper = newMockedErrorTagMapper()
 
@@ -49,11 +52,12 @@ func TestZeroWorkersNumber(t *testing.T) {
 	assert := assert.New(t)
 
 	// given
-	configuration := newConfiguration()
-	configuration.headers = &map[string]string{"a_header": "a_value"}
-	configuration.methods = &[]string{"PUT", "POST", "OPTIONS"}
-	var zero uint64
-	configuration.workersNumber = &zero
+	builder := NewBuilder()
+	configuration := builder.
+		Headers(map[string]string{"a_header": "a_value"}).
+		Methods([]string{"POST", "PUT", "OPTIONS"}).
+		WorkersNumber(0).
+		Build()
 	sut := newValidator(configuration)
 	sut.errorTagMapper = newMockedErrorTagMapper()
 
@@ -69,11 +73,12 @@ func TestTooManyWorkersNumber(t *testing.T) {
 	assert := assert.New(t)
 
 	// given
-	configuration := newConfiguration()
-	configuration.headers = &map[string]string{"a_header": "a_value"}
-	configuration.methods = &[]string{"PUT", "POST", "OPTIONS"}
-	var thousand uint64 = 1000
-	configuration.workersNumber = &thousand
+	builder := NewBuilder()
+	configuration := builder.
+		Headers(map[string]string{"a_header": "a_value"}).
+		Methods([]string{"POST", "PUT", "OPTIONS"}).
+		WorkersNumber(1000).
+		Build()
 	sut := newValidator(configuration)
 	sut.errorTagMapper = newMockedErrorTagMapper()
 
@@ -89,13 +94,13 @@ func TestInvalidHTTPErrorCodeBeforeRange(t *testing.T) {
 	assert := assert.New(t)
 
 	// given
-	configuration := newConfiguration()
-	configuration.headers = &map[string]string{"a_header": "a_value"}
-	configuration.methods = &[]string{"PUT", "POST", "OPTIONS"}
-	var thousand uint64 = 1
-	configuration.workersNumber = &thousand
-	var httpErrorCode uint64 = 99
-	configuration.httpErrorCode = &httpErrorCode
+	builder := NewBuilder()
+	configuration := builder.
+		Headers(map[string]string{"a_header": "a_value"}).
+		Methods([]string{"POST", "PUT", "OPTIONS"}).
+		WorkersNumber(1).
+		HTTPErrorCode(99).
+		Build()
 	sut := newValidator(configuration)
 	sut.errorTagMapper = newMockedErrorTagMapper()
 
@@ -111,13 +116,13 @@ func TestInvalidHTTPErrorCodeAfterRange(t *testing.T) {
 	assert := assert.New(t)
 
 	// given
-	configuration := newConfiguration()
-	configuration.headers = &map[string]string{"a_header": "a_value"}
-	configuration.methods = &[]string{"PUT", "POST", "OPTIONS"}
-	var thousand uint64 = 1
-	configuration.workersNumber = &thousand
-	var httpErrorCode uint64 = 600
-	configuration.httpErrorCode = &httpErrorCode
+	builder := NewBuilder()
+	configuration := builder.
+		Headers(map[string]string{"a_header": "a_value"}).
+		Methods([]string{"POST", "PUT", "OPTIONS"}).
+		WorkersNumber(1).
+		HTTPErrorCode(600).
+		Build()
 	sut := newValidator(configuration)
 	sut.errorTagMapper = newMockedErrorTagMapper()
 
@@ -133,13 +138,12 @@ func TestRelativeBaseUrl(t *testing.T) {
 	assert := assert.New(t)
 
 	// given
-	configuration := newConfiguration()
-	configuration.headers = &map[string]string{"a_header": "a_value"}
-	configuration.methods = &[]string{"PUT", "POST", "OPTIONS"}
-	var one uint64 = 1
-	configuration.workersNumber = &one
 	relativeURL, _ := url.Parse("relative/url/1/2/3")
-	configuration.baseURL = &relativeURL
+
+	builder := NewBuilder()
+	configuration := builder.
+		BaseURL(relativeURL).
+		Build()
 	sut := newValidator(configuration)
 	sut.errorTagMapper = newMockedErrorTagMapper()
 
@@ -155,13 +159,16 @@ func TestValidOfflineConfiguration(t *testing.T) {
 	assert := assert.New(t)
 
 	// given
-	configuration := newConfiguration()
-	configuration.headers = &map[string]string{"a_header": "a_value"}
-	configuration.methods = &[]string{"PUT", "POST", "OPTIONS"}
-	var one uint64 = 1
-	configuration.workersNumber = &one
 	relativeURL, _ := url.Parse("http://relative/url/1/2/3")
-	configuration.baseURL = &relativeURL
+
+	builder := NewBuilder()
+	configuration := builder.
+		Headers(map[string]string{"a_header": "a_value"}).
+		Methods([]string{"POST", "PUT", "OPTIONS"}).
+		WorkersNumber(1).
+		HTTPErrorCode(500).
+		BaseURL(relativeURL).
+		Build()
 	sut := newValidator(configuration)
 	sut.errorTagMapper = newMockedErrorTagMapper()
 
@@ -176,15 +183,13 @@ func TestInvalidHostBaseUrl(t *testing.T) {
 	assert := assert.New(t)
 
 	// given
-	configuration := newConfiguration()
-	configuration.headers = &map[string]string{"a_header": "a_value"}
-	configuration.methods = &[]string{"PUT", "POST", "OPTIONS"}
-	var one uint64 = 1
-	configuration.workersNumber = &one
 	invalidURL, _ := url.Parse("http://invalid-domain.tld/")
-	configuration.baseURL = &invalidURL
-	var responseTimeout = 1 * time.Second
-	configuration.urlResponseTimeout = &responseTimeout
+
+	builder := NewBuilder()
+	configuration := builder.
+		BaseURL(invalidURL).
+		URLResponseTimeout(1 * time.Second).
+		Build()
 	sut := newValidator(configuration)
 	sut.errorTagMapper = newMockedErrorTagMapper()
 
@@ -200,15 +205,13 @@ func TestMissingSchemeBaseUrl(t *testing.T) {
 	assert := assert.New(t)
 
 	// given
-	configuration := newConfiguration()
-	configuration.headers = &map[string]string{"a_header": "a_value"}
-	configuration.methods = &[]string{"PUT", "POST", "OPTIONS"}
-	var one uint64 = 1
-	configuration.workersNumber = &one
 	invalidURL, _ := url.Parse("invalid-domain.tld/test-dir/")
-	configuration.baseURL = &invalidURL
-	var responseTimeout = 1 * time.Second
-	configuration.urlResponseTimeout = &responseTimeout
+
+	builder := NewBuilder()
+	configuration := builder.
+		BaseURL(invalidURL).
+		URLResponseTimeout(1 * time.Second).
+		Build()
 	sut := newValidator(configuration)
 	sut.errorTagMapper = newMockedErrorTagMapper()
 
@@ -227,12 +230,13 @@ func TestValidHttpHostBaseUrl(t *testing.T) {
 	hostPort := "127.0.0.1:10601"
 	scheme := "http"
 	server := localserver.NewLocalServer(hostPort, scheme)
+	validURL, _ := url.Parse(scheme + "://" + hostPort)
 
-	configuration := newConfiguration()
-	invalidURL, _ := url.Parse(scheme + "://" + hostPort)
-	configuration.baseURL = &invalidURL
-	var responseTimeout = 1 * time.Second
-	configuration.urlResponseTimeout = &responseTimeout
+	builder := NewBuilder()
+	configuration := builder.
+		BaseURL(validURL).
+		URLResponseTimeout(1 * time.Second).
+		Build()
 	sut := newValidator(configuration)
 	sut.errorTagMapper = newMockedErrorTagMapper()
 
@@ -253,12 +257,13 @@ func TestValidHttpsHostBaseUrl(t *testing.T) {
 	hostPort := "localhost:10602"
 	scheme := "https"
 	server := localserver.NewLocalServer(hostPort, scheme)
+	validURL, _ := url.Parse(scheme + "://" + hostPort)
 
-	configuration := newConfiguration()
-	invalidURL, _ := url.Parse(scheme + "://" + hostPort)
-	configuration.baseURL = &invalidURL
-	var responseTimeout = 1 * time.Second
-	configuration.urlResponseTimeout = &responseTimeout
+	builder := NewBuilder()
+	configuration := builder.
+		BaseURL(validURL).
+		URLResponseTimeout(1 * time.Second).
+		Build()
 	sut := newValidator(configuration)
 	sut.errorTagMapper = newMockedErrorTagMapper()
 

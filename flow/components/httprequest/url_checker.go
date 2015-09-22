@@ -3,6 +3,7 @@ package httprequest
 import (
 	"log"
 
+	"github.com/mtojek/go-url-fuzzer/configuration"
 	"github.com/mtojek/go-url-fuzzer/flow/components/httpmethod"
 	"github.com/trustmaster/goflow"
 )
@@ -15,7 +16,7 @@ type URLChecker struct {
 }
 
 // NewURLChecker creates new instance of URL checker.
-func NewURLChecker(configuration urlCheckerConfiguration) *URLChecker {
+func NewURLChecker(configuration *configuration.Configuration) *URLChecker {
 	return &URLChecker{}
 }
 

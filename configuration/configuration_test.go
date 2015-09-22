@@ -14,7 +14,7 @@ func TestHeadersAvailable(t *testing.T) {
 	headerValue := "a_header_value"
 	expectedHeaders := map[string]string{headerName: headerValue}
 
-	builder := NewConfigurationBuilder()
+	builder := NewBuilder()
 	sut := builder.Headers(expectedHeaders).Build()
 
 	// when
@@ -45,7 +45,7 @@ func TestOutputFileAvailable(t *testing.T) {
 	// given
 	expectedOutputFile := "output_file.ext"
 
-	builder := NewConfigurationBuilder()
+	builder := NewBuilder()
 	sut := builder.OutputFile(expectedOutputFile).Build()
 
 	// when
@@ -76,7 +76,7 @@ func TestReportDirectoryAvailable(t *testing.T) {
 	// given
 	expectedReportDirectory := "report_directory"
 
-	builder := NewConfigurationBuilder()
+	builder := NewBuilder()
 	sut := builder.ReportDirectory(expectedReportDirectory).Build()
 
 	// when

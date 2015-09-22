@@ -3,6 +3,7 @@ package httpmethod
 import (
 	"testing"
 
+	"github.com/mtojek/go-url-fuzzer/configuration"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -11,7 +12,8 @@ func TestNewEntryProducer(t *testing.T) {
 
 	// given
 	methods := []string{"method_a", "method_b"}
-	configuration := newEntryProducerMockedConfiguration(methods)
+	builder := configuration.NewBuilder()
+	configuration := builder.Methods(methods).Build()
 
 	// when
 	sut := NewEntryProducer(configuration)
@@ -28,7 +30,8 @@ func TestOnRelativeURLThreeMethods(t *testing.T) {
 	entries := make(chan Entry, 3)
 
 	methods := []string{"method_a", "method_b", "method_c"}
-	configuration := newEntryProducerMockedConfiguration(methods)
+	builder := configuration.NewBuilder()
+	configuration := builder.Methods(methods).Build()
 	sut := NewEntryProducer(configuration)
 	sut.Entry = entries
 
@@ -50,7 +53,8 @@ func TestOnRelativeURLOneMethod(t *testing.T) {
 	entries := make(chan Entry, 3)
 
 	methods := []string{"method_a"}
-	configuration := newEntryProducerMockedConfiguration(methods)
+	builder := configuration.NewBuilder()
+	configuration := builder.Methods(methods).Build()
 	sut := NewEntryProducer(configuration)
 	sut.Entry = entries
 

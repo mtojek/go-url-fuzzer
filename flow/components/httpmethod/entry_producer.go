@@ -1,6 +1,7 @@
 package httpmethod
 
 import (
+	"github.com/mtojek/go-url-fuzzer/configuration"
 	"github.com/trustmaster/goflow"
 )
 
@@ -15,7 +16,7 @@ type EntryProducer struct {
 }
 
 // NewEntryProducer creates an instance of entry producer.
-func NewEntryProducer(configuration entryProducerConfiguration) *EntryProducer {
+func NewEntryProducer(configuration *configuration.Configuration) *EntryProducer {
 	methods := configuration.Methods()
 	return &EntryProducer{methods: methods}
 }
