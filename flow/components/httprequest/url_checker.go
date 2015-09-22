@@ -12,11 +12,13 @@ type URLChecker struct {
 
 	Entry      <-chan messages.Entry
 	FoundEntry chan<- messages.Entry
+
+	configuration *configuration.Configuration
 }
 
 // NewURLChecker creates new instance of URL checker.
 func NewURLChecker(configuration *configuration.Configuration) *URLChecker {
-	return &URLChecker{}
+	return &URLChecker{configuration: configuration}
 }
 
 // OnEntry perfoms the main URL check.
