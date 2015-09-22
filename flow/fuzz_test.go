@@ -25,4 +25,6 @@ func TestNewFuzzMinimalConfiguration(t *testing.T) {
 
 	// then
 	assert.NotNil(sut, "Instance should be created")
+	assert.NotNil(sut.graph, "Flow graph should be created")
+	assert.NotNil(sut.configuration, "Configuration should be set")
 }
