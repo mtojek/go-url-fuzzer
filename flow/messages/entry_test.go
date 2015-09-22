@@ -1,4 +1,4 @@
-package httpmethod
+package messages
 
 import (
 	"testing"
@@ -14,7 +14,7 @@ func TestEntryProperties(t *testing.T) {
 	httpMethod := "a_method"
 
 	// when
-	sut := newEntry(relativeURL, httpMethod)
+	sut := NewEntry(relativeURL, httpMethod)
 
 	// then
 	assert.Equal(relativeURL, sut.RelativeURL())

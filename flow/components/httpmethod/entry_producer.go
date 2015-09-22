@@ -2,6 +2,7 @@ package httpmethod
 
 import (
 	"github.com/mtojek/go-url-fuzzer/configuration"
+	"github.com/mtojek/go-url-fuzzer/flow/messages"
 	"github.com/trustmaster/goflow"
 )
 
@@ -10,7 +11,7 @@ type EntryProducer struct {
 	flow.Component
 
 	RelativeURL <-chan string
-	Entry       chan<- Entry
+	Entry       chan<- messages.Entry
 
 	methods []string
 }
@@ -24,7 +25,7 @@ func NewEntryProducer(configuration *configuration.Configuration) *EntryProducer
 // OnRelativeURL transforms incoming relative URLs into fuzz entries by adding HTTP methods.
 func (e *EntryProducer) OnRelativeURL(relativeURL string) {
 	for _, httpMethod := range e.methods {
-		entry := newEntry(relativeURL, httpMethod)
+		entry := messages.NewEntry(relativeURL, httpMethod)
 		e.Entry <- entry
 	}
 }

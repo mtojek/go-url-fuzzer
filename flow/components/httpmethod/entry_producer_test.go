@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/mtojek/go-url-fuzzer/configuration"
+	"github.com/mtojek/go-url-fuzzer/flow/messages"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -27,7 +28,7 @@ func TestOnRelativeURLThreeMethods(t *testing.T) {
 
 	// given
 	anURL := "an_url"
-	entries := make(chan Entry, 3)
+	entries := make(chan messages.Entry, 3)
 
 	methods := []string{"method_a", "method_b", "method_c"}
 	builder := configuration.NewBuilder()
@@ -39,9 +40,9 @@ func TestOnRelativeURLThreeMethods(t *testing.T) {
 	sut.OnRelativeURL(anURL)
 
 	// then
-	assert.Equal(<-entries, newEntry(anURL, "method_a"), "Entries are not equal")
-	assert.Equal(<-entries, newEntry(anURL, "method_b"), "Entries are not equal")
-	assert.Equal(<-entries, newEntry(anURL, "method_c"), "Entries are not equal")
+	assert.Equal(<-entries, messages.NewEntry(anURL, "method_a"), "Entries are not equal")
+	assert.Equal(<-entries, messages.NewEntry(anURL, "method_b"), "Entries are not equal")
+	assert.Equal(<-entries, messages.NewEntry(anURL, "method_c"), "Entries are not equal")
 	assert.Len(entries, 0, "Entries channel should be empty now")
 }
 
@@ -50,7 +51,7 @@ func TestOnRelativeURLOneMethod(t *testing.T) {
 
 	// given
 	anURL := "an_url"
-	entries := make(chan Entry, 3)
+	entries := make(chan messages.Entry, 3)
 
 	methods := []string{"method_a"}
 	builder := configuration.NewBuilder()
@@ -62,6 +63,6 @@ func TestOnRelativeURLOneMethod(t *testing.T) {
 	sut.OnRelativeURL(anURL)
 
 	// then
-	assert.Equal(<-entries, newEntry(anURL, "method_a"), "Entries are not equal")
+	assert.Equal(<-entries, messages.NewEntry(anURL, "method_a"), "Entries are not equal")
 	assert.Len(entries, 0, "Entries channel should be empty now")
 }
