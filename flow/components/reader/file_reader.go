@@ -4,13 +4,15 @@ import (
 	"bufio"
 	"log"
 	"os"
+
+	"github.com/mtojek/go-url-fuzzer/configuration"
 )
 
 type fileReader struct {
 	inputFile *os.File
 }
 
-func newFileReader(configuration fileReaderConfiguration) *fileReader {
+func newFileReader(configuration *configuration.Configuration) *fileReader {
 	inputFile := configuration.FuzzSetFile()
 	return &fileReader{inputFile: inputFile}
 }

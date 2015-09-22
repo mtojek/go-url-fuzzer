@@ -2,6 +2,8 @@ package reader
 
 import (
 	"log"
+
+	"github.com/mtojek/go-url-fuzzer/configuration"
 )
 
 // AbortableFileReader extends a standard file reader with aborting signals.
@@ -12,7 +14,7 @@ type AbortableFileReader struct {
 const fileReaderDataInChannelSize = 2 << 17
 
 // NewAbortableFileReader creates an instance of abortable file reader.
-func NewAbortableFileReader(configuration fileReaderConfiguration) *AbortableFileReader {
+func NewAbortableFileReader(configuration *configuration.Configuration) *AbortableFileReader {
 	fileReader := newFileReader(configuration)
 	return &AbortableFileReader{fileReader: fileReader}
 }

@@ -11,6 +11,7 @@ import (
 
 	"sync"
 
+	"github.com/mtojek/go-url-fuzzer/configuration"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -18,11 +19,11 @@ func TestNewInstanceHasFileReader(t *testing.T) {
 	assert := assert.New(t)
 
 	// given
-	file := new(os.File)
-	c := newFileReaderMockedConfiguration(file)
+	builder := configuration.NewBuilder()
+	configuration := builder.FuzzSetFile(new(os.File)).Build()
 
 	// when
-	sut := NewAbortableFileReader(c)
+	sut := NewAbortableFileReader(configuration)
 
 	// then
 	assert.NotNil(sut.fileReader, "File reader should not be empty.")
@@ -35,8 +36,9 @@ func TestPipeIncludingFileReader(t *testing.T) {
 	file, error := openFuzzSetFile("fuzz_01.txt")
 	assert.Nil(error, "Fuzz set file must be available, error: %v", error)
 
-	c := newFileReaderMockedConfiguration(file)
-	sut := NewAbortableFileReader(c)
+	builder := configuration.NewBuilder()
+	configuration := builder.FuzzSetFile(file).Build()
+	sut := NewAbortableFileReader(configuration)
 
 	var out = make(chan string, 3) // number of lines in fuzz file
 

@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/mtojek/go-url-fuzzer/configuration"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -13,10 +14,11 @@ func TestNewInstanceHasInputFile(t *testing.T) {
 
 	// given
 	file := new(os.File)
-	c := newFileReaderMockedConfiguration(file)
+	builder := configuration.NewBuilder()
+	configuration := builder.FuzzSetFile(file).Build()
 
 	// when
-	sut := newFileReader(c)
+	sut := newFileReader(configuration)
 
 	// then
 	assert.Equal(file, sut.inputFile, "Expected file is different than the specified in configuration.")
@@ -29,8 +31,9 @@ func TestPipe(t *testing.T) {
 	file, error := openFuzzSetFile("fuzz_01.txt")
 	assert.Nil(error, "Fuzz set file must be available, error: %v", error)
 
-	c := newFileReaderMockedConfiguration(file)
-	sut := newFileReader(c)
+	builder := configuration.NewBuilder()
+	configuration := builder.FuzzSetFile(file).Build()
+	sut := newFileReader(configuration)
 
 	var out = make(chan string, 3) // number of lines in fuzz file
 	var done = make(chan bool, 1)
@@ -56,8 +59,9 @@ func TestCloseFile(t *testing.T) {
 	file, error := openFuzzSetFile("fuzz_01.txt")
 	assert.Nil(error, "Fuzz set file must be available, error: %v", error)
 
-	c := newFileReaderMockedConfiguration(file)
-	sut := newFileReader(c)
+	builder := configuration.NewBuilder()
+	configuration := builder.FuzzSetFile(file).Build()
+	sut := newFileReader(configuration)
 
 	// when
 	sut.closeFile()
