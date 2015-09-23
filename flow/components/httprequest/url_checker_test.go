@@ -43,7 +43,7 @@ func TestOnEntryNoURLsFound(t *testing.T) {
 	assert := assert.New(t)
 
 	// given
-	address := "http://localhost:10605"
+	address := "http://localhost:10606"
 	url, error := url.Parse(address)
 	if nil != error {
 		log.Fatalf("Error occured while parsing an URL: %v, error: %v", address, error)
