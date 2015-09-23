@@ -38,7 +38,7 @@ func TestNewFuzzMinimalConfiguration(t *testing.T) {
 	assert.NotNil(sut.configuration, "Configuration should be set")
 }
 
-func TestStartFuzz(t *testing.T) {
+func TestStartSimpleFuzz(t *testing.T) {
 	assert := assert.New(t)
 
 	// given
