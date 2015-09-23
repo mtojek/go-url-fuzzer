@@ -8,6 +8,8 @@ import (
 
 	"time"
 
+	"net/url"
+
 	"github.com/mtojek/go-url-fuzzer/configuration"
 	"github.com/stretchr/testify/assert"
 )
@@ -18,6 +20,11 @@ func TestNewFuzzMinimalConfiguration(t *testing.T) {
 	// given
 	var workersNumber uint64 = 2
 	methods := []string{"GET", "POST"}
+	address := "http://localhost:10603"
+	url, error := url.Parse(address)
+	if nil != error {
+		log.Fatalf("Error occured while parsing an URL: %v, error: %v", address, error)
+	}
 
 	builder := configuration.NewBuilder()
 	configuration := builder.
@@ -26,6 +33,7 @@ func TestNewFuzzMinimalConfiguration(t *testing.T) {
 		Methods(methods).
 		URLResponseTimeout(3 * time.Second).
 		HTTPErrorCode(404).
+		BaseURL(url).
 		Build()
 
 	// when
@@ -44,6 +52,12 @@ func TestStartSimpleFuzz(t *testing.T) {
 	// given
 	var workersNumber uint64 = 2
 	methods := []string{"GET", "POST", "PUT"}
+	address := "http://localhost:10604"
+	url, error := url.Parse(address)
+	if nil != error {
+		log.Fatalf("Error occured while parsing an URL: %v, error: %v", address, error)
+	}
+
 	inputFile, error := os.OpenFile("../resources/input-data/fuzz_03.txt", os.O_RDONLY, 0666)
 	if nil != error {
 		log.Fatal("TestStartFuzz: ", error)
@@ -57,6 +71,7 @@ func TestStartSimpleFuzz(t *testing.T) {
 		URLResponseTimeout(3 * time.Second).
 		FuzzSetFile(inputFile).
 		HTTPErrorCode(404).
+		BaseURL(url).
 		Build()
 	sut := NewFuzz(configuration)
 

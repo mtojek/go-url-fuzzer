@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"time"
 
+	"net/url"
+
 	"github.com/mtojek/go-url-fuzzer/configuration"
 	"github.com/mtojek/go-url-fuzzer/flow/messages"
 	"github.com/trustmaster/goflow"
@@ -18,8 +20,8 @@ type URLChecker struct {
 	Entry      <-chan messages.Entry
 	FoundEntry chan<- messages.Entry
 
-	client *http.Client
-
+	client        *http.Client
+	baseURL       url.URL
 	headers       http.Header
 	httpErrorCode int
 	waitPeriod    time.Duration
@@ -29,6 +31,7 @@ type URLChecker struct {
 func NewURLChecker(configuration *configuration.Configuration) *URLChecker {
 	return &URLChecker{
 		client:        createHTTPClient(configuration),
+		baseURL:       configuration.BaseURL(),
 		headers:       createHTTPHeaders(configuration),
 		httpErrorCode: int(configuration.HTTPErrorCode()),
 		waitPeriod:    configuration.WorkerWaitPeriod(),
@@ -55,7 +58,12 @@ func createHTTPHeaders(configuration *configuration.Configuration) http.Header {
 
 // OnEntry perfoms the main URL check.
 func (u *URLChecker) OnEntry(entry messages.Entry) {
-	request, error := http.NewRequest(entry.HTTPMethod(), entry.RelativeURL(), nil)
+	absoluteURL, error := u.baseURL.Parse(entry.RelativeURL())
+	if nil != error {
+		log.Fatalf("Could not build absolute URL, base URL: %v, relative URL: %v, error: %v", u.baseURL, entry.RelativeURL(), error)
+	}
+
+	request, error := http.NewRequest(entry.HTTPMethod(), absoluteURL.String(), nil)
 	if nil != error {
 		log.Fatalf("Could not create a new request (method: %v, URL: %v), error: %v", entry.HTTPMethod(), entry.RelativeURL(), error)
 	}
