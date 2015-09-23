@@ -6,6 +6,8 @@ import (
 	"log"
 	"os"
 
+	"time"
+
 	"github.com/mtojek/go-url-fuzzer/configuration"
 	"github.com/stretchr/testify/assert"
 )
@@ -20,7 +22,10 @@ func TestNewFuzzMinimalConfiguration(t *testing.T) {
 	builder := configuration.NewBuilder()
 	configuration := builder.
 		WorkersNumber(workersNumber).
+		WorkerWaitPeriod(0).
 		Methods(methods).
+		URLResponseTimeout(3 * time.Second).
+		HTTPErrorCode(404).
 		Build()
 
 	// when
@@ -47,8 +52,11 @@ func TestStartFuzz(t *testing.T) {
 	builder := configuration.NewBuilder()
 	configuration := builder.
 		WorkersNumber(workersNumber).
+		WorkerWaitPeriod(0).
 		Methods(methods).
+		URLResponseTimeout(3 * time.Second).
 		FuzzSetFile(inputFile).
+		HTTPErrorCode(404).
 		Build()
 	sut := NewFuzz(configuration)
 

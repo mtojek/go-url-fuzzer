@@ -18,66 +18,66 @@ func NewBuilder() *Builder {
 }
 
 // Headers method allows to define HTTP headers.
-func (c *Builder) Headers(headers map[string]string) *Builder {
-	c.configuration.headers = &headers
-	return c
+func (b *Builder) Headers(headers map[string]string) *Builder {
+	b.configuration.headers = &headers
+	return b
 }
 
 // Methods method allows to define HTTP methods.
-func (c *Builder) Methods(methods []string) *Builder {
-	c.configuration.methods = &methods
-	return c
+func (b *Builder) Methods(methods []string) *Builder {
+	b.configuration.methods = &methods
+	return b
 }
 
 // OutputFile method allows to define a result output file.
-func (c *Builder) OutputFile(outputFile string) *Builder {
-	c.configuration.outputFile = &outputFile
-	return c
+func (b *Builder) OutputFile(outputFile string) *Builder {
+	b.configuration.outputFile = &outputFile
+	return b
 }
 
 // ReportDirectory method allows to define a report directory.
-func (c *Builder) ReportDirectory(reportDirectory string) *Builder {
-	c.configuration.reportDirectory = &reportDirectory
-	return c
+func (b *Builder) ReportDirectory(reportDirectory string) *Builder {
+	b.configuration.reportDirectory = &reportDirectory
+	return b
 }
 
 // URLResponseTimeout method allows to define a fuzzed URL response timeout.
-func (c *Builder) URLResponseTimeout(urlResponseTimeout time.Duration) *Builder {
-	c.configuration.urlResponseTimeout = &urlResponseTimeout
-	return c
+func (b *Builder) URLResponseTimeout(urlResponseTimeout time.Duration) *Builder {
+	b.configuration.urlResponseTimeout = &urlResponseTimeout
+	return b
 }
 
 // HTTPErrorCode method allows to define a HTTP error code.
-func (c *Builder) HTTPErrorCode(httpErrorCode uint64) *Builder {
-	c.configuration.httpErrorCode = &httpErrorCode
-	return c
+func (b *Builder) HTTPErrorCode(httpErrorCode uint64) *Builder {
+	b.configuration.httpErrorCode = &httpErrorCode
+	return b
 }
 
 // WorkersNumber method allows to define number of fuzzying workers.
-func (c *Builder) WorkersNumber(workersNumber uint64) *Builder {
-	c.configuration.workersNumber = &workersNumber
-	return c
+func (b *Builder) WorkersNumber(workersNumber uint64) *Builder {
+	b.configuration.workersNumber = &workersNumber
+	return b
 }
 
 // WorkerWaitPeriod method allows to define waiting period between each URL checks per worker.
-func (c *Builder) WorkerWaitPeriod(workerWaitPeriod time.Duration) *Builder {
-	c.configuration.workerWaitPeriod = &workerWaitPeriod
-	return c
+func (b *Builder) WorkerWaitPeriod(workerWaitPeriod time.Duration) *Builder {
+	b.configuration.workerWaitPeriod = &workerWaitPeriod
+	return b
 }
 
 // FuzzSetFile method allows to define a file with fuzz entries.
-func (c *Builder) FuzzSetFile(fuzzSetFile *os.File) *Builder {
-	c.configuration.fuzzSetFile = &fuzzSetFile
-	return c
+func (b *Builder) FuzzSetFile(fuzzSetFile *os.File) *Builder {
+	b.configuration.fuzzSetFile = &fuzzSetFile
+	return b
 }
 
 // BaseURL method allows to define a base URL.
-func (c *Builder) BaseURL(baseURL *url.URL) *Builder {
-	c.configuration.baseURL = &baseURL
-	return c
+func (b *Builder) BaseURL(baseURL *url.URL) *Builder {
+	b.configuration.baseURL = &baseURL
+	return b
 }
 
 // Build method returns a built earlier instance.
-func (c *Builder) Build() *Configuration {
-	return c.configuration
+func (b *Builder) Build() *Configuration {
+	return b.configuration
 }
