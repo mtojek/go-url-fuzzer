@@ -108,12 +108,62 @@ func TestOnEntryNoURLsFound(t *testing.T) {
 	assert.Len(foundEntries, 0, "No entries should be considered as found")
 }
 
+func TestOnEntryURLsHTTPS(t *testing.T) {
+	assert := assert.New(t)
+
+	// given
+	scheme := "https"
+	hostPort := "127.0.0.1:10607"
+	server := localserver.NewLocalServer(hostPort, scheme)
+
+	firstRegisteredPattern := "/ddd"
+	secondRegisteredPattern := "/eee"
+	http.HandleFunc(firstRegisteredPattern, noOperationHandler)
+	http.HandleFunc(secondRegisteredPattern, noOperationHandler)
+	server.StartTLS("../../../resources/certs/server_ca.pem", "../../../resources/certs/server_ca.key")
+
+	address := scheme + "://" + hostPort
+
+	url, error := url.Parse(address)
+	if nil != error {
+		log.Fatalf("Error occured while parsing an URL: %v, error: %v", address, error)
+	}
+
+	firstEntry := messages.NewEntry(firstRegisteredPattern, "GET")
+	secondEntry := messages.NewEntry(secondRegisteredPattern, "POST")
+	thirdEntry := messages.NewEntry("/ccc", "POST")
+
+	builder := configuration.NewBuilder()
+	configuration := builder.
+		URLResponseTimeout(3 * time.Second).
+		WorkerWaitPeriod(0).
+		HTTPErrorCode(http.StatusNotFound).
+		BaseURL(url).
+		Build()
+	sut := NewURLChecker(configuration)
+	foundEntries := make(chan messages.Entry, 4)
+	assignChannel(sut, foundEntries)
+
+	// when
+	sut.OnEntry(firstEntry)
+	sut.OnEntry(secondEntry)
+	sut.OnEntry(thirdEntry)
+
+	server.Stop()
+	http.DefaultServeMux = http.NewServeMux()
+
+	// then
+	assert.Len(foundEntries, 2, "Two entries should be considered as found")
+	assert.Equal(firstEntry, <-foundEntries, "First entry should be found")
+	assert.Equal(secondEntry, <-foundEntries, "Second entry should be found")
+}
+
 func TestOnEntryURLsFound(t *testing.T) {
 	assert := assert.New(t)
 
 	// given
 	scheme := "http"
-	hostPort := "127.0.0.1:10607"
+	hostPort := "127.0.0.1:10608"
 	server := localserver.NewLocalServer(hostPort, scheme)
 
 	firstRegisteredPattern := "/aaa"
@@ -163,7 +213,7 @@ func TestOnEntryAssignedHTTPErrorCode(t *testing.T) {
 
 	// given
 	scheme := "http"
-	hostPort := "127.0.0.1:10608"
+	hostPort := "127.0.0.1:10609"
 	server := localserver.NewLocalServer(hostPort, scheme)
 
 	firstRegisteredPattern := "/aaa"
