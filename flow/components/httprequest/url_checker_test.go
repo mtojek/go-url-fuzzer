@@ -97,7 +97,7 @@ func TestOnEntryNoURLsFound(t *testing.T) {
 		BaseURL(url).
 		Build()
 	sut := NewURLChecker(configuration)
-	foundEntries := make(chan messages.Entry, 4)
+	foundEntries := make(chan messages.FoundEntry, 4)
 	assignChannel(sut, foundEntries)
 
 	// when
@@ -141,7 +141,7 @@ func TestOnEntryURLsHTTPS(t *testing.T) {
 		BaseURL(url).
 		Build()
 	sut := NewURLChecker(configuration)
-	foundEntries := make(chan messages.Entry, 4)
+	foundEntries := make(chan messages.FoundEntry, 4)
 	assignChannel(sut, foundEntries)
 
 	// when
@@ -154,8 +154,8 @@ func TestOnEntryURLsHTTPS(t *testing.T) {
 
 	// then
 	assert.Len(foundEntries, 2, "Two entries should be considered as found")
-	assert.Equal(firstEntry, <-foundEntries, "First entry should be found")
-	assert.Equal(secondEntry, <-foundEntries, "Second entry should be found")
+	assert.Equal(messages.NewFoundEntry(firstEntry, http.StatusOK), <-foundEntries, "First entry should be found")
+	assert.Equal(messages.NewFoundEntry(secondEntry, http.StatusOK), <-foundEntries, "Second entry should be found")
 }
 
 func TestOnEntryURLsFound(t *testing.T) {
@@ -191,7 +191,7 @@ func TestOnEntryURLsFound(t *testing.T) {
 		BaseURL(url).
 		Build()
 	sut := NewURLChecker(configuration)
-	foundEntries := make(chan messages.Entry, 4)
+	foundEntries := make(chan messages.FoundEntry, 4)
 	assignChannel(sut, foundEntries)
 
 	// when
@@ -204,8 +204,8 @@ func TestOnEntryURLsFound(t *testing.T) {
 
 	// then
 	assert.Len(foundEntries, 2, "Two entries should be considered as found")
-	assert.Equal(firstEntry, <-foundEntries, "First entry should be found")
-	assert.Equal(secondEntry, <-foundEntries, "Second entry should be found")
+	assert.Equal(messages.NewFoundEntry(firstEntry, http.StatusOK), <-foundEntries, "First entry should be found")
+	assert.Equal(messages.NewFoundEntry(secondEntry, http.StatusOK), <-foundEntries, "Second entry should be found")
 }
 
 func TestOnEntryAssignedHTTPErrorCode(t *testing.T) {
@@ -241,7 +241,7 @@ func TestOnEntryAssignedHTTPErrorCode(t *testing.T) {
 		BaseURL(url).
 		Build()
 	sut := NewURLChecker(configuration)
-	foundEntries := make(chan messages.Entry, 4)
+	foundEntries := make(chan messages.FoundEntry, 4)
 	assignChannel(sut, foundEntries)
 
 	// when
@@ -254,7 +254,7 @@ func TestOnEntryAssignedHTTPErrorCode(t *testing.T) {
 
 	// then
 	assert.Len(foundEntries, 1, "One entry should be considered as found")
-	assert.Equal(<-foundEntries, thirdEntry, "Third entry should be found")
+	assert.Equal(messages.NewFoundEntry(thirdEntry, http.StatusNotFound), <-foundEntries, "Third entry should be found")
 }
 
 func TestOnEntryHTTPHeaders(t *testing.T) {
@@ -333,7 +333,7 @@ func TestCreateRequest(t *testing.T) {
 	assert.Equal([]string{secondHeaderValue}, result.Header[secondHeaderName], "HTTP header is different")
 }
 
-func assignChannel(instance *URLChecker, channel chan<- messages.Entry) {
+func assignChannel(instance *URLChecker, channel chan<- messages.FoundEntry) {
 	instance.FoundEntry = channel
 }
 

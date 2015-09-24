@@ -12,7 +12,7 @@ import (
 type ResultBroadcaster struct {
 	flow.Component
 
-	FoundEntry <-chan messages.Entry
+	FoundEntry <-chan messages.FoundEntry
 }
 
 // NewResultBroadcaster creates new instance of result broadcaster.
@@ -21,6 +21,6 @@ func NewResultBroadcaster(configuration *configuration.Configuration) *ResultBro
 }
 
 // OnFoundEntry performs broadcasting.
-func (r *ResultBroadcaster) OnFoundEntry(entry messages.Entry) {
-	log.Println(entry)
+func (r *ResultBroadcaster) OnFoundEntry(foundEntry messages.FoundEntry) {
+	log.Println(foundEntry)
 }

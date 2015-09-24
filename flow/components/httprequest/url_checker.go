@@ -18,7 +18,7 @@ type URLChecker struct {
 	flow.Component
 
 	Entry      <-chan messages.Entry
-	FoundEntry chan<- messages.Entry
+	FoundEntry chan<- messages.FoundEntry
 
 	client        *http.Client
 	baseURL       url.URL
@@ -67,7 +67,8 @@ func (u *URLChecker) OnEntry(entry messages.Entry) {
 	response, error := u.client.Do(request)
 	if nil == error {
 		if response.StatusCode != u.httpErrorCode {
-			u.FoundEntry <- entry
+			foundEntry := messages.NewFoundEntry(entry, response.StatusCode)
+			u.FoundEntry <- foundEntry
 		}
 	}
 
