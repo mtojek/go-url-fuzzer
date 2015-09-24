@@ -16,7 +16,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNewURLChecker(t *testing.T) {
+func TestNewURLCheckerClient(t *testing.T) {
 	assert := assert.New(t)
 
 	// given
@@ -26,9 +26,10 @@ func TestNewURLChecker(t *testing.T) {
 		log.Fatalf("Error occured while parsing an URL: %v, error: %v", address, error)
 	}
 
+	expectedURLResponseTimeout := 99 * time.Second
 	builder := configuration.NewBuilder()
 	configuration := builder.
-		URLResponseTimeout(3 * time.Second).
+		URLResponseTimeout(expectedURLResponseTimeout).
 		WorkerWaitPeriod(0).
 		HTTPErrorCode(http.StatusNotFound).
 		BaseURL(url).
@@ -40,6 +41,39 @@ func TestNewURLChecker(t *testing.T) {
 	// then
 	assert.NotNil(sut, "URL checker instance should be created")
 	assert.NotNil(sut.client, "HTTP client should be set")
+	assert.NotNil(expectedURLResponseTimeout, sut.client.Timeout, "URL response timeout should be same as given")
+}
+
+func TestNewURLCheckerProperties(t *testing.T) {
+	assert := assert.New(t)
+
+	// given
+	address := "http://localhost:10605"
+	url, error := url.Parse(address)
+	if nil != error {
+		log.Fatalf("Error occured while parsing an URL: %v, error: %v", address, error)
+	}
+
+	expectedWorkerWaitPeriod := 0 * time.Second
+	expectedHTTPErrorCode := http.StatusNotFound
+
+	builder := configuration.NewBuilder()
+	configuration := builder.
+		URLResponseTimeout(3 * time.Second).
+		WorkerWaitPeriod(expectedWorkerWaitPeriod).
+		HTTPErrorCode(uint64(expectedHTTPErrorCode)).
+		BaseURL(url).
+		Build()
+
+	// when
+	sut := NewURLChecker(configuration)
+
+	// then
+	assert.NotNil(sut, "URL checker instance should be created")
+	assert.Equal(*url, sut.baseURL, "Base URL should be same as given")
+	assert.Equal(expectedHTTPErrorCode, sut.httpErrorCode, "HTTP error code should be same as given")
+	assert.Equal(expectedHTTPErrorCode, sut.httpErrorCode, "HTTP error code should be same as given")
+	assert.Equal(expectedWorkerWaitPeriod, sut.waitPeriod, "Worker wait period should be same as given")
 }
 
 func TestOnEntryNoURLsFound(t *testing.T) {
@@ -59,7 +93,7 @@ func TestOnEntryNoURLsFound(t *testing.T) {
 	configuration := builder.
 		URLResponseTimeout(3 * time.Second).
 		WorkerWaitPeriod(0).
-		HTTPErrorCode(http.StatusNotFound).
+		HTTPErrorCode(uint64(http.StatusNotFound)).
 		BaseURL(url).
 		Build()
 	sut := NewURLChecker(configuration)
@@ -120,8 +154,8 @@ func TestOnEntryURLsFound(t *testing.T) {
 
 	// then
 	assert.Len(foundEntries, 2, "Two entries should be considered as found")
-	assert.Equal(<-foundEntries, firstEntry, "First entry should be found")
-	assert.Equal(<-foundEntries, secondEntry, "Second entry should be found")
+	assert.Equal(firstEntry, <-foundEntries, "First entry should be found")
+	assert.Equal(secondEntry, <-foundEntries, "Second entry should be found")
 }
 
 func TestOnEntryAssignedHTTPErrorCode(t *testing.T) {
@@ -129,7 +163,7 @@ func TestOnEntryAssignedHTTPErrorCode(t *testing.T) {
 
 	// given
 	scheme := "http"
-	hostPort := "127.0.0.1:10607"
+	hostPort := "127.0.0.1:10608"
 	server := localserver.NewLocalServer(hostPort, scheme)
 
 	firstRegisteredPattern := "/aaa"
