@@ -41,7 +41,7 @@ func TestNewURLCheckerClient(t *testing.T) {
 	// then
 	assert.NotNil(sut, "URL checker instance should be created")
 	assert.NotNil(sut.client, "HTTP client should be set")
-	assert.NotNil(expectedURLResponseTimeout, sut.client.Timeout, "URL response timeout should be same as given")
+	assert.Equal(expectedURLResponseTimeout, sut.client.Timeout, "URL response timeout should be same as given")
 }
 
 func TestNewURLCheckerProperties(t *testing.T) {
@@ -255,6 +255,82 @@ func TestOnEntryAssignedHTTPErrorCode(t *testing.T) {
 	// then
 	assert.Len(foundEntries, 1, "One entry should be considered as found")
 	assert.Equal(<-foundEntries, thirdEntry, "Third entry should be found")
+}
+
+func TestOnEntryHTTPHeaders(t *testing.T) {
+	assert := assert.New(t)
+
+	// given
+	address := "http://localhost:10610"
+	url, error := url.Parse(address)
+	if nil != error {
+		log.Fatalf("Error occured while parsing an URL: %v, error: %v", address, error)
+	}
+
+	firstHeaderName := "first"
+	firstHeaderValue := "8903434"
+	secondHeaderName := "second"
+	secondHeaderValue := "34234324"
+
+	headers := map[string]string{firstHeaderName: firstHeaderValue, secondHeaderName: secondHeaderValue}
+	expectedURLResponseTimeout := 99 * time.Second
+	builder := configuration.NewBuilder()
+	configuration := builder.
+		Headers(headers).
+		URLResponseTimeout(expectedURLResponseTimeout).
+		WorkerWaitPeriod(0).
+		HTTPErrorCode(http.StatusNotFound).
+		BaseURL(url).
+		Build()
+
+	// when
+	sut := NewURLChecker(configuration)
+
+	// then
+	assert.NotNil(sut, "URL checker instance should be created")
+	assert.Len(sut.headers, 2, "The number of HTTP headers is different than expected")
+	assert.Equal([]string{firstHeaderValue}, sut.headers[firstHeaderName], "HTTP header is different")
+	assert.Equal([]string{secondHeaderValue}, sut.headers[secondHeaderName], "HTTP header is different")
+}
+
+func TestCreateRequest(t *testing.T) {
+	assert := assert.New(t)
+
+	// given
+	address := "http://localhost:10611"
+	url, error := url.Parse(address)
+	if nil != error {
+		log.Fatalf("Error occured while parsing an URL: %v, error: %v", address, error)
+	}
+
+	firstHeaderName := "first"
+	firstHeaderValue := "8903434"
+	secondHeaderName := "second"
+	secondHeaderValue := "34234324"
+
+	httpMethod := "DELETE"
+
+	headers := map[string]string{firstHeaderName: firstHeaderValue, secondHeaderName: secondHeaderValue}
+	expectedURLResponseTimeout := 99 * time.Second
+	builder := configuration.NewBuilder()
+	configuration := builder.
+		Headers(headers).
+		URLResponseTimeout(expectedURLResponseTimeout).
+		WorkerWaitPeriod(0).
+		HTTPErrorCode(http.StatusNotFound).
+		BaseURL(url).
+		Build()
+
+	sut := NewURLChecker(configuration)
+
+	// when
+	result := sut.createRequest(httpMethod, address)
+
+	// then
+	assert.NotNil(result, "HTTP result should not be nil")
+	assert.Equal(httpMethod, result.Method, "HTTP method should be same as given")
+	assert.Equal([]string{firstHeaderValue}, result.Header[firstHeaderName], "HTTP header is different")
+	assert.Equal([]string{secondHeaderValue}, result.Header[secondHeaderName], "HTTP header is different")
 }
 
 func assignChannel(instance *URLChecker, channel chan<- messages.Entry) {

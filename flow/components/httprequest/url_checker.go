@@ -45,7 +45,7 @@ func createHTTPClient(configuration *configuration.Configuration) *http.Client {
 }
 
 func createHTTPHeaders(configuration *configuration.Configuration) http.Header {
-	var preparedHeaders http.Header
+	preparedHeaders := http.Header{}
 
 	if headers, exists := configuration.Headers(); exists {
 		for name, value := range headers {
@@ -63,12 +63,7 @@ func (u *URLChecker) OnEntry(entry messages.Entry) {
 		log.Fatalf("Could not build absolute URL, base URL: %v, relative URL: %v, error: %v", u.baseURL, entry.RelativeURL(), error)
 	}
 
-	request, error := http.NewRequest(entry.HTTPMethod(), absoluteURL.String(), nil)
-	if nil != error {
-		log.Fatalf("Could not create a new request (method: %v, URL: %v), error: %v", entry.HTTPMethod(), entry.RelativeURL(), error)
-	}
-	request.Header = u.headers
-
+	request := u.createRequest(entry.HTTPMethod(), absoluteURL.String())
 	response, error := u.client.Do(request)
 	if nil == error {
 		if response.StatusCode != u.httpErrorCode {
@@ -77,6 +72,16 @@ func (u *URLChecker) OnEntry(entry messages.Entry) {
 	}
 
 	u.waitIfNecessary()
+}
+
+func (u *URLChecker) createRequest(method string, absoluteURL string) *http.Request {
+	if request, error := http.NewRequest(method, absoluteURL, nil); nil != error {
+		log.Fatalf("Could not create request, URL: %v, error: %v", absoluteURL, error)
+	} else {
+		request.Header = u.headers
+		return request
+	}
+	return nil
 }
 
 func (u *URLChecker) waitIfNecessary() {
