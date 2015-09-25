@@ -10,7 +10,10 @@ import (
 
 	"net/url"
 
+	"net/http"
+
 	"github.com/mtojek/go-url-fuzzer/configuration"
+	"github.com/mtojek/localserver"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -80,4 +83,61 @@ func TestStartSimpleFuzzNoServerRunning(t *testing.T) {
 
 	// then
 	assert.Len(sut.input, 0, "Input channel should be empty now")
+}
+
+func TestStartSimpleFuzzWithServerRunning(t *testing.T) {
+	assert := assert.New(t)
+
+	// given
+	hostPort := "localhost:10612"
+	scheme := "http"
+	address := scheme + "://" + hostPort
+
+	server := localserver.NewLocalServer(hostPort, scheme)
+	firstHandler := newVisitHandler("/smietnik", "GET")
+	secondHandler := newVisitHandler("/spotkania", "POST")
+	thirdHandler := newVisitHandler("/aukcje", "PUT")
+
+	http.HandleFunc(firstHandler.endpoint, firstHandler.handle)
+	http.HandleFunc(secondHandler.endpoint, firstHandler.handle)
+	http.HandleFunc(thirdHandler.endpoint, firstHandler.handle)
+
+	server.Start()
+
+	var workersNumber uint64 = 4
+	methods := []string{"GET", "POST", "PUT"}
+
+	url, error := url.Parse(address)
+	if nil != error {
+		log.Fatalf("Error occured while parsing an URL: %v, error: %v", address, error)
+	}
+
+	inputFile, error := os.OpenFile("../resources/input-data/fuzz_03.txt", os.O_RDONLY, 0666)
+	if nil != error {
+		log.Fatal("TestStartFuzz: ", error)
+	}
+
+	builder := configuration.NewBuilder()
+	configuration := builder.
+		WorkersNumber(workersNumber).
+		WorkerWaitPeriod(0).
+		Methods(methods).
+		URLResponseTimeout(3 * time.Second).
+		FuzzSetFile(inputFile).
+		HTTPErrorCode(404).
+		BaseURL(url).
+		Build()
+	sut := NewFuzz(configuration)
+
+	// when
+	sut.Start()
+
+	server.Stop()
+	http.DefaultServeMux = http.NewServeMux()
+
+	// then
+	assert.Len(sut.input, 0, "Input channel should be empty now")
+	assert.True(firstHandler.visitted, "Handler "+firstHandler.endpoint+" should be found")
+	assert.True(firstHandler.visitted, "Handler "+secondHandler.endpoint+" should be found")
+	assert.True(firstHandler.visitted, "Handler "+thirdHandler.endpoint+" should be found")
 }
