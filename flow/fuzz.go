@@ -54,7 +54,10 @@ func (f *Fuzz) Start() {
 	flow.RunNet(f.graph)
 
 	abortableFileReader := reader.NewAbortableFileReader(f.configuration)
-	abortableFileReader.Pipe(f.input)
-
-	<-f.graph.Wait()
+	isDone := abortableFileReader.Pipe(f.input)
+	if isDone {
+		<-f.graph.Wait()
+	} else {
+		f.graph.Stop()
+	}
 }
