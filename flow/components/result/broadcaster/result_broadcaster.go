@@ -19,8 +19,8 @@ type ResultBroadcaster struct {
 
 // NewResultBroadcaster creates new instance of result broadcaster.
 func NewResultBroadcaster(configuration *configuration.Configuration) *ResultBroadcaster {
-	_, defined := configuration.OutputFile()
-	return &ResultBroadcaster{isOutputFileDefined: defined}
+	_, isDefined := configuration.OutputFile()
+	return &ResultBroadcaster{isOutputFileDefined: isDefined}
 }
 
 // OnFoundEntry performs broadcasting.
