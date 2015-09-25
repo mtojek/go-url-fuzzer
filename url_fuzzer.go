@@ -1,6 +1,9 @@
 package main
 
 import (
+	"log"
+	"os"
+
 	"github.com/mtojek/go-url-fuzzer/configuration"
 	"github.com/mtojek/go-url-fuzzer/flow"
 )
@@ -12,8 +15,9 @@ func newURLFuzzer() *urlFuzzer {
 }
 
 func (u *urlFuzzer) run() {
-	configuration := u.readConfiguration()
+	log.SetOutput(os.Stdout)
 
+	configuration := u.readConfiguration()
 	fuzz := flow.NewFuzz(configuration)
 	fuzz.Start()
 }

@@ -6,6 +6,7 @@ import (
 	"github.com/mtojek/go-url-fuzzer/flow/components/httprequest"
 	"github.com/mtojek/go-url-fuzzer/flow/components/reader"
 	"github.com/mtojek/go-url-fuzzer/flow/components/result/broadcaster"
+	"github.com/mtojek/go-url-fuzzer/flow/components/result/printer"
 	"github.com/trustmaster/goflow"
 )
 
@@ -36,11 +37,17 @@ func NewFuzz(configuration *configuration.Configuration) *Fuzz {
 	resultBroadcaster.Component.Mode = flow.ComponentModePool
 	resultBroadcaster.Component.PoolSize = 1
 
+	printer := printer.NewPrinter()
+	printer.Component.Mode = flow.ComponentModePool
+	printer.Component.PoolSize = 1
+
 	graph.Add(entryProducer, "entryProducer")
 	graph.Add(urlChecker, "urlChecker")
 	graph.Add(resultBroadcaster, "resultBroadcaster")
+	graph.Add(printer, "printer")
 	graph.Connect("entryProducer", "Entry", "urlChecker", "Entry")
 	graph.Connect("urlChecker", "FoundEntry", "resultBroadcaster", "FoundEntry")
+	graph.Connect("resultBroadcaster", "Printer", "printer", "FoundEntry")
 	graph.MapInPort("In", "entryProducer", "RelativeURL")
 
 	var input = make(chan string, fuzzNetworkInputSize)
