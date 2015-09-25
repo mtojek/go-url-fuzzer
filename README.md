@@ -36,7 +36,7 @@ Flags:
   -t, --timeout=5s  Fuzzed url response timeout
   -e, --http-error-code=404
                     HTTP error code
-  -n, --workers-number=5
+  -n, --workers-number=4
                     Number of workers
   -w, --wait-period=0s
                     Time wait period between fuzz tests per worker
