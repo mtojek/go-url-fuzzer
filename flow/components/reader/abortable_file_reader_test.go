@@ -43,13 +43,14 @@ func TestPipeIncludingFileReader(t *testing.T) {
 	var out = make(chan string, 3) // number of lines in fuzz file
 
 	// when
-	sut.Pipe(out)
+	isPipingDone := sut.Pipe(out)
 
 	// then
 	assert.Equal("001", <-out, "Invalid line read from file.")
 	assert.Equal("002", <-out, "Invalid line read from file.")
 	assert.Equal("003", <-out, "Invalid line read from file.")
 	assert.Len(out, 0, "Out buffer should be empty now.")
+	assert.True(isPipingDone, "Piping data was finished successfully")
 
 	assert.Equal(^(uintptr(0)), file.Fd(), "File descriptor should be closed now.")
 }
@@ -66,13 +67,15 @@ func TestAbortedPiping(t *testing.T) {
 	var out = make(chan string, numberOfStrings+numberOfStrings)
 	writeStrings(in, 1, numberOfStrings)
 
+	var isPipingDone bool
+
 	var wg sync.WaitGroup
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
 
 		// when
-		sut.doPiping(in, out, done)
+		isPipingDone = sut.doPiping(in, out, done)
 	}()
 
 	waitForStringsToBePiped(in, out, numberOfStrings)
@@ -89,6 +92,7 @@ func TestAbortedPiping(t *testing.T) {
 
 	assert.Len(out, 0, "Out buffer should be empty right now.")
 	assert.Len(done, 0, "No done event should appear.")
+	assert.False(isPipingDone, "Piping data was aborted")
 }
 
 func writeStrings(in chan string, from int, to int) {
