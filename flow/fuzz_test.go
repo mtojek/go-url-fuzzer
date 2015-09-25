@@ -99,8 +99,8 @@ func TestStartSimpleFuzzWithServerRunning(t *testing.T) {
 	thirdHandler := newVisitHandler("/aukcje", "PUT")
 
 	http.HandleFunc(firstHandler.endpoint, firstHandler.handle)
-	http.HandleFunc(secondHandler.endpoint, firstHandler.handle)
-	http.HandleFunc(thirdHandler.endpoint, firstHandler.handle)
+	http.HandleFunc(secondHandler.endpoint, secondHandler.handle)
+	http.HandleFunc(thirdHandler.endpoint, thirdHandler.handle)
 
 	server.Start()
 
@@ -138,6 +138,6 @@ func TestStartSimpleFuzzWithServerRunning(t *testing.T) {
 	// then
 	assert.Len(sut.input, 0, "Input channel should be empty now")
 	assert.True(firstHandler.visitted, "Handler "+firstHandler.endpoint+" should be found")
-	assert.True(firstHandler.visitted, "Handler "+secondHandler.endpoint+" should be found")
-	assert.True(firstHandler.visitted, "Handler "+thirdHandler.endpoint+" should be found")
+	assert.True(secondHandler.visitted, "Handler "+secondHandler.endpoint+" should be found")
+	assert.True(thirdHandler.visitted, "Handler "+thirdHandler.endpoint+" should be found")
 }
