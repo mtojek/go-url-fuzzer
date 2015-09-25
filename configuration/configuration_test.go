@@ -69,34 +69,3 @@ func TestOutputFileNotAvailable(t *testing.T) {
 	assert.Empty(actualOutputFile, "Output file should be empty.")
 	assert.False(exists, "Value should not exist")
 }
-
-func TestReportDirectoryAvailable(t *testing.T) {
-	assert := assert.New(t)
-
-	// given
-	expectedReportDirectory := "report_directory"
-
-	builder := NewBuilder()
-	sut := builder.ReportDirectory(expectedReportDirectory).Build()
-
-	// when
-	actualReportDirectory, exists := sut.ReportDirectory()
-
-	// then
-	assert.Equal(actualReportDirectory, expectedReportDirectory, "Assgined different report directories.")
-	assert.True(exists, "Value should exist")
-}
-
-func TestReportDirectoryNotAvailable(t *testing.T) {
-	assert := assert.New(t)
-
-	// given
-	sut := newConfiguration()
-
-	// when
-	actualReportDirectory, exists := sut.ReportDirectory()
-
-	// then
-	assert.Empty(actualReportDirectory, "Report directory should be empty.")
-	assert.False(exists, "Value should not exist")
-}

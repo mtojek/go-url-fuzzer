@@ -52,20 +52,6 @@ func TestAddOutputFile(t *testing.T) {
 	assert.Equal(result.outputFile, &outputFile, "Output files should be equal")
 }
 
-func TestAddReportDirectory(t *testing.T) {
-	assert := assert.New(t)
-
-	// given
-	reportDirectory := "report-directory"
-	sut := NewBuilder()
-
-	// when
-	result := sut.ReportDirectory(reportDirectory).Build()
-
-	// then
-	assert.Equal(result.reportDirectory, &reportDirectory, "Report directories should be equal")
-}
-
 func TestAddURLResponseTimeout(t *testing.T) {
 	assert := assert.New(t)
 

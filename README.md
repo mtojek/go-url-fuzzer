@@ -14,7 +14,6 @@ Discover hidden files and directories on a web server. The application tries to 
 * Configurable time wait periods between fuzz tests per worker
 * Custom HTTP headers support
 * Various HTTP methods support
-* HTML url fuzzing reports
 
 ## Usage
 
@@ -31,8 +30,6 @@ Flags:
   -m, --method=GET  HTTP method used in tests (GET, POST, PUT, DELETE, HEAD, OPTIONS)
   -o, --output=output_file.txt
                     Output text file with found urls and statuses
-  -r, --report=report_directory
-                    Target output directory of an url fuzzing HTML report
   -t, --timeout=5s  Fuzzed url response timeout
   -e, --http-error-code=404
                     HTTP error code

@@ -11,7 +11,6 @@ type Configuration struct {
 	headers            *map[string]string
 	methods            *[]string
 	outputFile         *string
-	reportDirectory    *string
 	urlResponseTimeout *time.Duration
 	httpErrorCode      *uint64
 	workersNumber      *uint64
@@ -42,15 +41,6 @@ func (c *Configuration) Methods() []string {
 func (c *Configuration) OutputFile() (result string, exists bool) {
 	if c.outputFile != nil {
 		result = *c.outputFile
-		exists = true
-	}
-	return result, exists
-}
-
-// ReportDirectory method returns a target directory of HTML report files.
-func (c *Configuration) ReportDirectory() (result string, exists bool) {
-	if c.reportDirectory != nil {
-		result = *c.reportDirectory
 		exists = true
 	}
 	return result, exists

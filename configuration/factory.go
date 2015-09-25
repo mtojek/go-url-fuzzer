@@ -24,7 +24,6 @@ func (f *Factory) createFlagsBoundConfiguration() *Configuration {
 	configuration.headers = kingpin.Flag("header", "Custom HTTP header added to every fuzz request, format: \"name: value\"").Short('h').PlaceHolder("\"Name: value\"").StringMap()
 	configuration.methods = kingpin.Flag("method", "HTTP method used in tests (GET, POST, PUT, DELETE, HEAD, OPTIONS)").Short('m').Default("GET").Enums("GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS")
 	configuration.outputFile = kingpin.Flag("output", "Output text file with found urls and statuses").Short('o').PlaceHolder("output_file.txt").String()
-	configuration.reportDirectory = kingpin.Flag("report", "Target output directory of an url fuzzing HTML report").Short('r').PlaceHolder("report_directory").String()
 	configuration.urlResponseTimeout = kingpin.Flag("timeout", "Fuzzed url response timeout").Short('t').Default("5s").Duration()
 	configuration.httpErrorCode = kingpin.Flag("http-error-code", "HTTP error code").Short('e').Default("404").Uint64()
 	configuration.workersNumber = kingpin.Flag("workers-number", "Number of workers").Short('n').Default("4").Uint64()

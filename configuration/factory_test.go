@@ -20,7 +20,6 @@ func TestCreateFlagsBoundConfiguration(t *testing.T) {
 	assert.NotNil(result.headers, "Headers should not be nil")
 	assert.NotNil(result.methods, "Methods should not be nil")
 	assert.NotNil(result.outputFile, "Output file should not be nil")
-	assert.NotNil(result.reportDirectory, "Report directory should not be nil")
 	assert.NotNil(result.urlResponseTimeout, "Response timeout should not be nil")
 	assert.NotNil(result.workersNumber, "Workers number should not be nil")
 	assert.NotNil(result.httpErrorCode, "HTTP error code should not be nil")

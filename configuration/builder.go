@@ -35,12 +35,6 @@ func (b *Builder) OutputFile(outputFile string) *Builder {
 	return b
 }
 
-// ReportDirectory method allows to define a report directory.
-func (b *Builder) ReportDirectory(reportDirectory string) *Builder {
-	b.configuration.reportDirectory = &reportDirectory
-	return b
-}
-
 // URLResponseTimeout method allows to define a fuzzed URL response timeout.
 func (b *Builder) URLResponseTimeout(urlResponseTimeout time.Duration) *Builder {
 	b.configuration.urlResponseTimeout = &urlResponseTimeout
