@@ -39,7 +39,7 @@ func (c *Configuration) Methods() []string {
 
 // OutputFile method returns a path of the text output file.
 func (c *Configuration) OutputFile() (result string, defined bool) {
-	if c.outputFile != nil {
+	if c.outputFile != nil && *c.outputFile != "" {
 		result = *c.outputFile
 		defined = true
 	}
