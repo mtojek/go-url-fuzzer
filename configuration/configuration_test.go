@@ -49,11 +49,11 @@ func TestOutputFileAvailable(t *testing.T) {
 	sut := builder.OutputFile(expectedOutputFile).Build()
 
 	// when
-	actualOutputFile, exists := sut.OutputFile()
+	actualOutputFile, defined := sut.OutputFile()
 
 	// then
 	assert.Equal(actualOutputFile, expectedOutputFile, "Assgined different output files.")
-	assert.True(exists, "Value should exist")
+	assert.True(defined, "Value should be defined")
 }
 
 func TestOutputFileNotAvailable(t *testing.T) {
@@ -63,9 +63,9 @@ func TestOutputFileNotAvailable(t *testing.T) {
 	sut := newConfiguration()
 
 	// when
-	actualOutputFile, exists := sut.OutputFile()
+	actualOutputFile, defined := sut.OutputFile()
 
 	// then
 	assert.Empty(actualOutputFile, "Output file should be empty.")
-	assert.False(exists, "Value should not exist")
+	assert.False(defined, "Value should not be defined")
 }

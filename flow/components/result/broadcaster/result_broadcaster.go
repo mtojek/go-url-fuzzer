@@ -12,14 +12,21 @@ type ResultBroadcaster struct {
 
 	FoundEntry <-chan messages.FoundEntry
 	Printer    chan<- messages.FoundEntry
+	FileWriter chan<- messages.FoundEntry
+
+	isOutputFileDefined bool
 }
 
 // NewResultBroadcaster creates new instance of result broadcaster.
 func NewResultBroadcaster(configuration *configuration.Configuration) *ResultBroadcaster {
-	return &ResultBroadcaster{}
+	_, defined := configuration.OutputFile()
+	return &ResultBroadcaster{isOutputFileDefined: defined}
 }
 
 // OnFoundEntry performs broadcasting.
 func (r *ResultBroadcaster) OnFoundEntry(foundEntry messages.FoundEntry) {
 	r.Printer <- foundEntry
+	if r.isOutputFileDefined {
+		r.FileWriter <- foundEntry
+	}
 }

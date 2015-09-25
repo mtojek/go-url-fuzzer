@@ -38,12 +38,12 @@ func (c *Configuration) Methods() []string {
 }
 
 // OutputFile method returns a path of the text output file.
-func (c *Configuration) OutputFile() (result string, exists bool) {
+func (c *Configuration) OutputFile() (result string, defined bool) {
 	if c.outputFile != nil {
 		result = *c.outputFile
-		exists = true
+		defined = true
 	}
-	return result, exists
+	return result, defined
 }
 
 // URLResponseTimeout method returns fuzzed URL response timeout.
