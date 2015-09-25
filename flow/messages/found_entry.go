@@ -3,44 +3,46 @@ package messages
 import (
 	"bytes"
 	"fmt"
-	"log"
-	"net/url"
 )
 
 // FoundEntry represents a found relative URL with the particular HTTP method and returned HTTP status code.
 type FoundEntry struct {
-	entry  Entry
-	status int
+	absoluteURL string
+	httpMethod  string
+	status      int
 }
 
-// NewFoundEntry creates a new instance of entry.
-func NewFoundEntry(entry Entry, status int) FoundEntry {
-	return FoundEntry{entry: entry, status: status}
+// NewFoundEntry creates a new instance of found entry.
+func NewFoundEntry(absoluteURL string, httpMethod string, status int) FoundEntry {
+	return FoundEntry{
+		absoluteURL: absoluteURL,
+		httpMethod:  httpMethod,
+		status:      status,
+	}
 }
 
-// Entry method returns found entry
-func (f *FoundEntry) Entry() Entry {
-	return f.entry
+// AbsoluteURL method returns a found absolute URL.
+func (f *FoundEntry) AbsoluteURL() string {
+	return f.absoluteURL
 }
 
-// Status method returns HTTP status code.
+// HTTPMethod returns a HTTP method.
+func (f *FoundEntry) HTTPMethod() string {
+	return f.httpMethod
+}
+
+// Status method returns a HTTP response code of visited found URL.
 func (f *FoundEntry) Status() int {
 	return f.status
 }
 
-func (f *FoundEntry) String(baseURL url.URL) string {
+// String method returns a string representation of instance.
+func (f *FoundEntry) String() string {
 	var buffer bytes.Buffer
-
-	absoluteURL, error := baseURL.Parse(f.entry.relativeURL)
-	if nil != error {
-		log.Fatalf("Error occured while preparing string representation of found entry, base URL: %v, relative URL: %v, error: %v", baseURL.String(), f.entry.relativeURL, error)
-	}
-
-	buffer.WriteString(f.entry.httpMethod)
+	buffer.WriteString(f.httpMethod)
 	buffer.WriteByte(' ')
-	buffer.WriteString(absoluteURL.String())
+	buffer.WriteString(f.absoluteURL)
 	buffer.WriteByte(' ')
 	buffer.WriteString(fmt.Sprintf("%d", f.status))
-
 	return buffer.String()
 }

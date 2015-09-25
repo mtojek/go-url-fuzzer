@@ -154,8 +154,8 @@ func TestOnEntryURLsHTTPS(t *testing.T) {
 
 	// then
 	assert.Len(foundEntries, 2, "Two entries should be considered as found")
-	assert.Equal(messages.NewFoundEntry(firstEntry, http.StatusOK), <-foundEntries, "First entry should be found")
-	assert.Equal(messages.NewFoundEntry(secondEntry, http.StatusOK), <-foundEntries, "Second entry should be found")
+	assert.Equal(messages.NewFoundEntry(address+firstEntry.RelativeURL(), firstEntry.HTTPMethod(), http.StatusOK), <-foundEntries, "First entry should be found")
+	assert.Equal(messages.NewFoundEntry(address+secondEntry.RelativeURL(), secondEntry.HTTPMethod(), http.StatusOK), <-foundEntries, "Second entry should be found")
 }
 
 func TestOnEntryURLsFound(t *testing.T) {
@@ -204,8 +204,8 @@ func TestOnEntryURLsFound(t *testing.T) {
 
 	// then
 	assert.Len(foundEntries, 2, "Two entries should be considered as found")
-	assert.Equal(messages.NewFoundEntry(firstEntry, http.StatusOK), <-foundEntries, "First entry should be found")
-	assert.Equal(messages.NewFoundEntry(secondEntry, http.StatusOK), <-foundEntries, "Second entry should be found")
+	assert.Equal(messages.NewFoundEntry(address+firstEntry.RelativeURL(), firstEntry.HTTPMethod(), http.StatusOK), <-foundEntries, "First entry should be found")
+	assert.Equal(messages.NewFoundEntry(address+secondEntry.RelativeURL(), secondEntry.HTTPMethod(), http.StatusOK), <-foundEntries, "Second entry should be found")
 }
 
 func TestOnEntryAssignedHTTPErrorCode(t *testing.T) {
@@ -254,7 +254,7 @@ func TestOnEntryAssignedHTTPErrorCode(t *testing.T) {
 
 	// then
 	assert.Len(foundEntries, 1, "One entry should be considered as found")
-	assert.Equal(messages.NewFoundEntry(thirdEntry, http.StatusNotFound), <-foundEntries, "Third entry should be found")
+	assert.Equal(messages.NewFoundEntry(address+thirdEntry.RelativeURL(), thirdEntry.HTTPMethod(), http.StatusNotFound), <-foundEntries, "Third entry should be found")
 }
 
 func TestOnEntryHTTPHeaders(t *testing.T) {

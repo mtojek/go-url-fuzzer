@@ -27,5 +27,5 @@ func NewResultBroadcaster(configuration *configuration.Configuration) *ResultBro
 
 // OnFoundEntry performs broadcasting.
 func (r *ResultBroadcaster) OnFoundEntry(foundEntry messages.FoundEntry) {
-	log.Println(foundEntry.String(r.baseURL))
+	log.Println(foundEntry.String())
 }

@@ -73,7 +73,7 @@ func (u *URLChecker) OnEntry(entry messages.Entry) {
 		}()
 
 		if response.StatusCode != u.httpErrorCode {
-			foundEntry := messages.NewFoundEntry(entry, response.StatusCode)
+			foundEntry := messages.NewFoundEntry(absoluteURL.String(), entry.HTTPMethod(), response.StatusCode)
 			u.FoundEntry <- foundEntry
 		}
 	}
