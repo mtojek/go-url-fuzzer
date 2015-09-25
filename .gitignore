@@ -31,3 +31,6 @@ _testmain.go
 # Binary
 #
 go-url-fuzzer
+
+# Local temporary directory
+tmp/
