@@ -33,4 +33,4 @@ cc: #cleancode
 	goimports -w .
 
 dev: install
-	go-url-fuzzer -h "a: 1" -h "b: 2" -m "POST" -m "GET" -m "PUT" resources/input-data/fuzz_02.txt http://wp.pl/
+	go-url-fuzzer -h "a: 1" -h "b: 2" -m "POST" -m "GET" -m "PUT" resources/input-data/fuzz_02.txt http://www.wp.pl/
