@@ -66,6 +66,12 @@ func (u *URLChecker) OnEntry(entry messages.Entry) {
 	request := u.createRequest(entry.HTTPMethod(), absoluteURL.String())
 	response, error := u.client.Do(request)
 	if nil == error {
+		defer func() {
+			if nil != response.Body {
+				response.Body.Close()
+			}
+		}()
+
 		if response.StatusCode != u.httpErrorCode {
 			foundEntry := messages.NewFoundEntry(entry, response.StatusCode)
 			u.FoundEntry <- foundEntry
