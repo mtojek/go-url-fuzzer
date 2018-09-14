@@ -29,7 +29,7 @@ func TestReadConfiguration(t *testing.T) {
 }
 
 func setCommandLineArgs(customArguments ...string) {
-	os.Args = os.Args[:len(os.Args)-1] // remove test.v flag
+	os.Args = os.Args[:len(os.Args)-2] // remove test.v and test.testlogfile flag
 	for _, customArgument := range customArguments {
 		os.Args = append(os.Args, customArgument)
 	}
