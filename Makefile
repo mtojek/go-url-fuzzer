@@ -3,6 +3,7 @@
 build: go-get install test
 
 go-get:
+	go get golang.org/x/tools/cmd/goimports
 	go get github.com/golang/lint/golint
 	go get github.com/trustmaster/goflow
 	go get gopkg.in/alecthomas/kingpin.v2
@@ -15,7 +16,7 @@ install:
 test:
 	go test -v ./...
 	go test -race  -i ./...
-	golint ./...
+	golint -set_exit_status ./...
 	go tool vet -v=true .
 	test -z "`gofmt -d .`"
 	test -z "`goimports -l .`"
