@@ -8,7 +8,7 @@ import (
 
 	"github.com/mtojek/go-url-fuzzer/configuration"
 	"github.com/mtojek/go-url-fuzzer/flow/messages"
-	"github.com/trustmaster/goflow"
+	flow "github.com/trustmaster/goflow"
 )
 
 // FileWriter receives found relative URLs and writes to the output file.

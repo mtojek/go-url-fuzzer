@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/mtojek/go-url-fuzzer/flow/messages"
-	"github.com/trustmaster/goflow"
+	flow "github.com/trustmaster/goflow"
 )
 
 // Printer receives found relative URLs and prints them to default logging output.

@@ -10,7 +10,7 @@ import (
 
 	"github.com/mtojek/go-url-fuzzer/configuration"
 	"github.com/mtojek/go-url-fuzzer/flow/messages"
-	"github.com/trustmaster/goflow"
+	flow "github.com/trustmaster/goflow"
 )
 
 // URLChecker consumes entries containing relative URL to check and HTTP method.

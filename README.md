@@ -17,6 +17,8 @@ Discover hidden files and directories on a web server. The application tries to 
 
 ## Usage
 
+Make sure you install [v0 of goflow](https://github.com/trustmaster/goflow/tree/v0). 
+
 ~~~
 $ go-url-fuzzer --help
 usage: go-url-fuzzer [<flags>] <fuzz-set-file> <base-url>

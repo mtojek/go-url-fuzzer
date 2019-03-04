@@ -27,3 +27,6 @@ cc: #cleancode
 
 dev: install
 	go-url-fuzzer -h "a: 1" -h "b: 2" -m "POST" -m "GET" -m "PUT" resources/input-data/fuzz_02.txt http://www.wp.pl/
+
+static:
+	go build --ldflags "-w -s -extldflags \"-static\"" -tags 'netgo'
