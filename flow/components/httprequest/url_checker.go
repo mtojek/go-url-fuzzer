@@ -4,13 +4,12 @@ import (
 	"crypto/tls"
 	"log"
 	"net/http"
-	"time"
-
 	"net/url"
+	"time"
 
 	"github.com/mtojek/go-url-fuzzer/configuration"
 	"github.com/mtojek/go-url-fuzzer/flow/messages"
-	"github.com/trustmaster/goflow"
+	flow "gopkg.in/trustmaster/goflow.v0"
 )
 
 // URLChecker consumes entries containing relative URL to check and HTTP method.

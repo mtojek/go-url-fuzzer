@@ -8,7 +8,7 @@ import (
 	"github.com/mtojek/go-url-fuzzer/flow/components/result/broadcaster"
 	"github.com/mtojek/go-url-fuzzer/flow/components/result/filewriter"
 	"github.com/mtojek/go-url-fuzzer/flow/components/result/printer"
-	"github.com/trustmaster/goflow"
+	flow "gopkg.in/trustmaster/goflow.v0"
 )
 
 const fuzzNetworkInputSize = 256

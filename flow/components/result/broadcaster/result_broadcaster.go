@@ -3,7 +3,7 @@ package broadcaster
 import (
 	"github.com/mtojek/go-url-fuzzer/configuration"
 	"github.com/mtojek/go-url-fuzzer/flow/messages"
-	"github.com/trustmaster/goflow"
+	flow "gopkg.in/trustmaster/goflow.v0"
 )
 
 // ResultBroadcaster receives found relative URLs and broadcasts to active output components.

@@ -3,12 +3,12 @@
 build: go-get install test
 
 go-get:
-	go get golang.org/x/tools/cmd/goimports
-	go get github.com/golang/lint/golint
 	go get github.com/trustmaster/goflow
 	go get gopkg.in/alecthomas/kingpin.v2
 	go get github.com/stretchr/testify
+	go get github.com/stretchr/testify/assert
 	go get github.com/mtojek/localserver
+	go get github.com/alecthomas/gometalinter && gometalinter install
 
 install:
 	go get -t -v ./...
@@ -16,10 +16,7 @@ install:
 test:
 	go test -v ./...
 	go test -race  -i ./...
-	golint -set_exit_status ./...
-	go tool vet -v=true .
-	test -z "`gofmt -d .`"
-	test -z "`goimports -l .`"
+	gometalinter --disable-all --enable=vet --enable=golint --enable=goimports --enable=gofmt .
 
 cc: #cleancode
 	gofmt -s -w .
