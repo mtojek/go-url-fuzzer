@@ -8,7 +8,7 @@ go-get:
 	go get github.com/stretchr/testify
 	go get github.com/stretchr/testify/assert
 	go get github.com/mtojek/localserver
-	go get github.com/alecthomas/gometalinter && gometalinter install
+	go get github.com/alecthomas/gometalinter && gometalinter --install
 
 install:
 	go get -t -v ./...
